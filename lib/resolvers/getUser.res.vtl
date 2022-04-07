@@ -1,0 +1,7 @@
+## Pass back the result from DynamoDB. **
+#if(!$ctx.result.items.isEmpty())
+  #set( $user = $ctx.result.items.get(0) )
+  $util.toJson($user)
+#else
+  $util.toJson(null)
+#end

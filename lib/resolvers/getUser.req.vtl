@@ -1,0 +1,17 @@
+#set( $limit = $util.defaultIfNull($ctx.args.limit, 10) + 1)
+{
+    "version": "2017-02-28",
+    "operation": "Query",
+    "query" : {
+        "expression" : "#pk = :pk and begins_with(#sk, :sk)",
+        "expressionNames" : {
+            "#pk" : "pk",
+            "#sk" : "sk"
+        },
+        "expressionValues" : {
+            ":pk" : $util.dynamodb.toDynamoDBJson("USER#${ctx.args.id}"),
+            ":sk" : $util.dynamodb.toDynamoDBJson("USER#${ctx.args.id}")
+        }
+    },
+    "limit" : $limit
+}

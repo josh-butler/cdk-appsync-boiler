@@ -2,7 +2,7 @@
 help local-init arm64 \
 clean npmi build deploy \
 lint unit test test-single coverage \
-invoke invoke-out
+invoke invoke-out codegen
 
 -include Makefile.env
 
@@ -11,6 +11,7 @@ SRC_PATH=$(ROOT_PATH)/src
 BIN:=$(ROOT_PATH)/node_modules/.bin
 ESLINT=$(BIN)/eslint
 JEST=$(BIN)/jest
+AMPLIFY=$(BIN)/amplify
 
 APP_NAME?=cdk-appsync-boiler
 AWS_REGION?=us-east-1
@@ -58,6 +59,9 @@ npmi: ## Install npm dependencies
 
 arm64: ## Enable local Linux OS ARM64 support
 	docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+
+codegen: ## Generate GraphQL code/types
+	cd $(ROOT_PATH)/lib && $(AMPLIFY) codegen
 
 local-init: ## Generate initial local dev support files 
 	@if [ ! -f ./Makefile.env ]; then \

@@ -1,0 +1,15 @@
+type User {
+  id: ID!
+  name: String
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+}
+
+type Mutation {
+  createUser(name: String!): User
+}
+
+type Query {
+  getUser(id: ID!, limit: Int): User
+  listUsers: [User]
+}
