@@ -1,0 +1,17 @@
+.DS_Store
+
+*.d.ts
+node_modules
+
+# CDK asset staging directory
+.cdk.staging
+cdk.out
+
+# local dev
+.vscode
+events/
+.env.local.json
+Makefile.env
+invoke.out
+coverage
+build
