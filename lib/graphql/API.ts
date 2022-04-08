@@ -2,21 +2,21 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
-export type User = {
-  __typename: "User",
+export type Device = {
+  __typename: "Device",
   id: string,
   name?: string | null,
   createdAt?: string | null,
   updatedAt?: string | null,
 };
 
-export type CreateUserMutationVariables = {
+export type CreateDeviceMutationVariables = {
   name: string,
 };
 
-export type CreateUserMutation = {
-  createUser?:  {
-    __typename: "User",
+export type CreateDeviceMutation = {
+  createDevice?:  {
+    __typename: "Device",
     id: string,
     name?: string | null,
     createdAt?: string | null,
@@ -24,14 +24,14 @@ export type CreateUserMutation = {
   } | null,
 };
 
-export type GetUserQueryVariables = {
+export type GetDeviceQueryVariables = {
   id: string,
   limit?: number | null,
 };
 
-export type GetUserQuery = {
-  getUser?:  {
-    __typename: "User",
+export type GetDeviceQuery = {
+  getDevice?:  {
+    __typename: "Device",
     id: string,
     name?: string | null,
     createdAt?: string | null,
@@ -39,9 +39,9 @@ export type GetUserQuery = {
   } | null,
 };
 
-export type ListUsersQuery = {
-  listUsers?:  Array< {
-    __typename: "User",
+export type ListDevicesQuery = {
+  listDevices?:  Array< {
+    __typename: "Device",
     id: string,
     name?: string | null,
     createdAt?: string | null,

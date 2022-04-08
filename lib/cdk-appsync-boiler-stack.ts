@@ -29,7 +29,7 @@ export class CdkAppSyncBoilerStack extends Stack {
 
     // ==== AppSync ====
     const api = new appsync.GraphqlApi(this, 'Api', {
-      name: 'Users',
+      name: 'IotData',
       schema: appsync.Schema.fromAsset('./lib/schema.graphql'),
       authorizationConfig: {
         defaultAuthorization: {
@@ -43,37 +43,37 @@ export class CdkAppSyncBoilerStack extends Stack {
       },
     });
 
-    const userDS = api.addDynamoDbDataSource('UserDS', entityTable);
+    const deviceDS = api.addDynamoDbDataSource('DeviceDS', entityTable);
 
-    userDS.createResolver({
+    deviceDS.createResolver({
       typeName: 'Mutation',
-      fieldName: 'createUser',
+      fieldName: 'createDevice',
       requestMappingTemplate: appsync.MappingTemplate.fromFile(
-        './lib/resolvers/createUser.req.vtl'
+        './lib/resolvers/createDevice.req.vtl'
       ),
       responseMappingTemplate: appsync.MappingTemplate.fromFile(
-        './lib/resolvers/createUser.res.vtl'
+        './lib/resolvers/createDevice.res.vtl'
       ),
     });
 
-    userDS.createResolver({
+    deviceDS.createResolver({
       typeName: 'Query',
-      fieldName: 'getUser',
+      fieldName: 'getDevice',
       requestMappingTemplate: appsync.MappingTemplate.fromFile(
-        './lib/resolvers/getUser.req.vtl'
+        './lib/resolvers/getDevice.req.vtl'
       ),
       responseMappingTemplate: appsync.MappingTemplate.fromFile(
-        './lib/resolvers/getUser.res.vtl'
+        './lib/resolvers/getDevice.res.vtl'
       ),
     });
 
     // ==== Lambda ====
-    const userGetResolver = new NodejsFunction(this, 'UserGetResolver', {
+    const deviceGetResolver = new NodejsFunction(this, 'DeviceGetResolver', {
       memorySize: 128,
       timeout: Duration.seconds(30),
       runtime: Runtime.NODEJS_14_X,
       handler: 'handler',
-      entry: './src/handlers/user-get-resolver.ts',
+      entry: './src/handlers/device-get-resolver.ts',
       bundling: {
         minify: true,
         externalModules: ['aws-sdk'],
@@ -81,9 +81,9 @@ export class CdkAppSyncBoilerStack extends Stack {
     });
 
     // ==== Outputs ====
-    new CfnOutput(this, 'UserGetResolverLambdaArn', {
-      description: 'UserGetResolver Function ARN',
-      value: userGetResolver.functionArn,
+    new CfnOutput(this, 'DeviceGetResolverLambdaArn', {
+      description: 'DeviceGetResolver Function ARN',
+      value: deviceGetResolver.functionArn,
     });
 
     new CfnOutput(this, 'ApiId', {

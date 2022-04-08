@@ -9,8 +9,8 @@
             "#sk" : "sk"
         },
         "expressionValues" : {
-            ":pk" : $util.dynamodb.toDynamoDBJson("USER#${ctx.args.id}"),
-            ":sk" : $util.dynamodb.toDynamoDBJson("USER#${ctx.args.id}")
+            ":pk" : $util.dynamodb.toDynamoDBJson("DEVICE#${ctx.args.id}"),
+            ":sk" : $util.dynamodb.toDynamoDBJson("DEVICE#${ctx.args.id}")
         }
     },
     "limit" : $limit

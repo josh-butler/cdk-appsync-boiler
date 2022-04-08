@@ -2,9 +2,9 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const getUser = /* GraphQL */ `
-  query GetUser($id: ID!, $limit: Int) {
-    getUser(id: $id, limit: $limit) {
+export const getDevice = /* GraphQL */ `
+  query GetDevice($id: ID!, $limit: Int) {
+    getDevice(id: $id, limit: $limit) {
       id
       name
       createdAt
@@ -12,9 +12,9 @@ export const getUser = /* GraphQL */ `
     }
   }
 `;
-export const listUsers = /* GraphQL */ `
-  query ListUsers {
-    listUsers {
+export const listDevices = /* GraphQL */ `
+  query ListDevices {
+    listDevices {
       id
       name
       createdAt

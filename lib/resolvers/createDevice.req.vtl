@@ -1,15 +1,15 @@
-#set($id = $util.autoId())
+#set($id = $util.autoUlid())
 #set($date = $util.time.nowISO8601())
 {
   "version": "2017-02-28",
   "operation": "PutItem",
   "key": {
-    "pk": $util.dynamodb.toDynamoDBJson("USER#${id}"),
-    "sk": $util.dynamodb.toDynamoDBJson("USER#${id}"),
+    "pk": $util.dynamodb.toDynamoDBJson("DEVICE#${id}"),
+    "sk": $util.dynamodb.toDynamoDBJson("DEVICE#${id}"),
   },
   "attributeValues": $util.dynamodb.toMapValuesJson({
     "id": $id,
-    "__typeName": "User",
+    "__typeName": "DEVICE",
     "name": $ctx.args.name,
     "createdAt": $date,
     "updatedAt": $date

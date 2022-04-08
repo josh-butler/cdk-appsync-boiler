@@ -1,4 +1,4 @@
-type User {
+type Device {
   id: ID!
   name: String
   createdAt: AWSDateTime
@@ -6,10 +6,10 @@ type User {
 }
 
 type Mutation {
-  createUser(name: String!): User
+  createDevice(name: String!): Device
 }
 
 type Query {
-  getUser(id: ID!, limit: Int): User
-  listUsers: [User]
+  getDevice(id: ID!, limit: Int): Device
+  listDevices: [Device]
 }

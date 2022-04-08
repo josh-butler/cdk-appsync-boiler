@@ -2,6 +2,12 @@
 
 A CDK AppSync example app
 
+
+## Related Documentation
+
+### AppSync
+* [https://docs.aws.amazon.com/appsync/latest/devguide/appsync-dg.pdf](https://docs.aws.amazon.com/appsync/latest/devguide/appsync-dg.pdf)
+
 ## Development
 
 ### Makefile
