@@ -1,0 +1,19 @@
+#set( $limit = $util.defaultIfNull($ctx.args.limit, 10))
+
+{
+    "version": "2017-02-28",
+    "operation": "Query",
+    "query": {
+      "expression": "#pk = :pk and begins_with(#sk, :sk)",
+      "expressionNames": {
+        "#pk": "pk",
+        "#sk": "sk"
+      },
+      "expressionValues": {
+        ":sk": $util.dynamodb.toDynamoDBJson("DEVICE#${context.args.deviceId}"),
+        ":pk": $util.dynamodb.toDynamoDBJson("DEVICE#${context.args.deviceId}"),
+      }
+    },
+    "limit" : $limit,
+    "nextToken": $util.toJson($util.defaultIfNull($ctx.args.nextToken, null))
+}

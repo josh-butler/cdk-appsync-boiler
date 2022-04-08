@@ -5,11 +5,31 @@ type Device {
   updatedAt: AWSDateTime
 }
 
+type Sensor {
+  id: ID!
+  deviceId: ID!
+  name: String!
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+}
+
+type DeviceConnection {
+  items: [Device]
+  nextToken: String
+}
+
+type SensorConnection {
+  items: [Sensor!]
+  nextToken: String
+}
+
 type Mutation {
   createDevice(name: String!): Device
+  createSensor(deviceId: ID!, name: String!): Sensor
 }
 
 type Query {
   getDevice(id: ID!, limit: Int): Device
   listDevices: [Device]
+  getMoreSensors(deviceId: ID!, limit: Int, nextToken: String): SensorConnection
 }

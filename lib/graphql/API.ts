@@ -10,6 +10,21 @@ export type Device = {
   updatedAt?: string | null,
 };
 
+export type Sensor = {
+  __typename: "Sensor",
+  id: string,
+  deviceId: string,
+  name: string,
+  createdAt?: string | null,
+  updatedAt?: string | null,
+};
+
+export type SensorConnection = {
+  __typename: "SensorConnection",
+  items?:  Array<Sensor > | null,
+  nextToken?: string | null,
+};
+
 export type CreateDeviceMutationVariables = {
   name: string,
 };
@@ -19,6 +34,22 @@ export type CreateDeviceMutation = {
     __typename: "Device",
     id: string,
     name?: string | null,
+    createdAt?: string | null,
+    updatedAt?: string | null,
+  } | null,
+};
+
+export type CreateSensorMutationVariables = {
+  deviceId: string,
+  name: string,
+};
+
+export type CreateSensorMutation = {
+  createSensor?:  {
+    __typename: "Sensor",
+    id: string,
+    deviceId: string,
+    name: string,
     createdAt?: string | null,
     updatedAt?: string | null,
   } | null,
@@ -47,4 +78,25 @@ export type ListDevicesQuery = {
     createdAt?: string | null,
     updatedAt?: string | null,
   } | null > | null,
+};
+
+export type GetMoreSensorsQueryVariables = {
+  deviceId: string,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type GetMoreSensorsQuery = {
+  getMoreSensors?:  {
+    __typename: "SensorConnection",
+    items?:  Array< {
+      __typename: "Sensor",
+      id: string,
+      deviceId: string,
+      name: string,
+      createdAt?: string | null,
+      updatedAt?: string | null,
+    } > | null,
+    nextToken?: string | null,
+  } | null,
 };

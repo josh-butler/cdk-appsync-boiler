@@ -12,3 +12,14 @@ export const createDevice = /* GraphQL */ `
     }
   }
 `;
+export const createSensor = /* GraphQL */ `
+  mutation CreateSensor($deviceId: ID!, $name: String!) {
+    createSensor(deviceId: $deviceId, name: $name) {
+      id
+      deviceId
+      name
+      createdAt
+      updatedAt
+    }
+  }
+`;

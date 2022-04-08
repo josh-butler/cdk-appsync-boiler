@@ -45,6 +45,7 @@ export class CdkAppSyncBoilerStack extends Stack {
 
     const deviceDS = api.addDynamoDbDataSource('DeviceDS', entityTable);
 
+    // = Devices
     deviceDS.createResolver({
       typeName: 'Mutation',
       fieldName: 'createDevice',
@@ -66,6 +67,40 @@ export class CdkAppSyncBoilerStack extends Stack {
         './lib/resolvers/getDevice.res.vtl'
       ),
     });
+
+    deviceDS.createResolver({
+      typeName: 'Query',
+      fieldName: 'listDevices',
+      requestMappingTemplate: appsync.MappingTemplate.fromFile(
+        './lib/resolvers/listDevices.req.vtl'
+      ),
+      responseMappingTemplate: appsync.MappingTemplate.fromFile(
+        './lib/resolvers/listDevices.res.vtl'
+      ),
+    });
+
+    // = Sensors
+    deviceDS.createResolver({
+      typeName: 'Mutation',
+      fieldName: 'createSensor',
+      requestMappingTemplate: appsync.MappingTemplate.fromFile(
+        './lib/resolvers/createSensor.req.vtl'
+      ),
+      responseMappingTemplate: appsync.MappingTemplate.fromFile(
+        './lib/resolvers/createSensor.res.vtl'
+      ),
+    });
+
+    // deviceDS.createResolver({
+    //   typeName: 'Query',
+    //   fieldName: 'getMoreSensors',
+    //   requestMappingTemplate: appsync.MappingTemplate.fromFile(
+    //     './lib/resolvers/getMoreSensors.req.vtl'
+    //   ),
+    //   responseMappingTemplate: appsync.MappingTemplate.fromFile(
+    //     './lib/resolvers/getMoreSensors.res.vtl'
+    //   ),
+    // });
 
     // ==== Lambda ====
     const deviceGetResolver = new NodejsFunction(this, 'DeviceGetResolver', {
