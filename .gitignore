@@ -3,6 +3,10 @@
 *.d.ts
 node_modules
 
+# only commit public keys
+keys/*
+!keys/id_rsa.pub
+
 # CDK asset staging directory
 .cdk.staging
 cdk.out

@@ -63,6 +63,11 @@ arm64: ## Enable local Linux OS ARM64 support
 codegen: ## Generate GraphQL code/types
 	cd $(ROOT_PATH)/lib && $(AMPLIFY) codegen
 
+jwt-keys: ## generate private & public keys for JWT purposes
+	mkdir -p keys
+	cd keys && ssh-keygen -t rsa -b 4096 -m PEM -f id_rsa -q -N ""
+	cd keys && openssl rsa -in id_rsa -pubout -outform PEM -out id_rsa.pub
+
 local-init: ## Generate initial local dev support files 
 	@if [ ! -f ./Makefile.env ]; then \
 		echo "AWS_PROFILE=default\nLAMBDA_NAME=StatusGet\nLAMBDA_EVENT=events/event.json\nTEST_NAME=test" > ./Makefile.env; \
