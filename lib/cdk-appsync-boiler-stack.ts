@@ -27,6 +27,34 @@ export class CdkAppSyncBoilerStack extends Stack {
       sortKey: {name: 'sk', type: AttributeType.STRING},
     });
 
+    // ==== Lambda ====
+    const gqlAuthorizer = new NodejsFunction(this, 'GqlAuthorizer', {
+      memorySize: 128,
+      timeout: Duration.seconds(30),
+      runtime: Runtime.NODEJS_14_X,
+      handler: 'handler',
+      entry: './src/handlers/gql-authorizer.ts',
+      environment: {
+        JWT_PUBLIC_KEY: '',
+      },
+      bundling: {
+        minify: true,
+        externalModules: ['aws-sdk'],
+      },
+    });
+
+    const deviceGetResolver = new NodejsFunction(this, 'DeviceGetResolver', {
+      memorySize: 128,
+      timeout: Duration.seconds(30),
+      runtime: Runtime.NODEJS_14_X,
+      handler: 'handler',
+      entry: './src/handlers/device-get-resolver.ts',
+      bundling: {
+        minify: true,
+        externalModules: ['aws-sdk'],
+      },
+    });
+
     // ==== AppSync ====
     const api = new appsync.GraphqlApi(this, 'Api', {
       name: 'IotData',
@@ -34,6 +62,13 @@ export class CdkAppSyncBoilerStack extends Stack {
       authorizationConfig: {
         defaultAuthorization: {
           authorizationType: appsync.AuthorizationType.API_KEY,
+
+          // authorizationType: appsync.AuthorizationType.LAMBDA,
+          // lambdaAuthorizerConfig: {
+          //   handler: gqlAuthorizer,
+          //   resultsCacheTtl: Duration.seconds(300),
+          //   validationRegex: '/(^[A-Za-z0-9-_]*\.[A-Za-z0-9-_]*\.[A-Za-z0-9-_]*$)/g' // eslint-disable-line
+          // },
         },
       },
       xrayEnabled: false,
@@ -101,34 +136,6 @@ export class CdkAppSyncBoilerStack extends Stack {
     //     './lib/resolvers/getMoreSensors.res.vtl'
     //   ),
     // });
-
-    // ==== Lambda ====
-    const gqlAuthorizer = new NodejsFunction(this, 'GqlAuthorizer', {
-      memorySize: 128,
-      timeout: Duration.seconds(30),
-      runtime: Runtime.NODEJS_14_X,
-      handler: 'handler',
-      entry: './src/handlers/gql-authorizer.ts',
-      environment: {
-        JWT_PUBLIC_KEY: '',
-      },
-      bundling: {
-        minify: true,
-        externalModules: ['aws-sdk'],
-      },
-    });
-
-    const deviceGetResolver = new NodejsFunction(this, 'DeviceGetResolver', {
-      memorySize: 128,
-      timeout: Duration.seconds(30),
-      runtime: Runtime.NODEJS_14_X,
-      handler: 'handler',
-      entry: './src/handlers/device-get-resolver.ts',
-      bundling: {
-        minify: true,
-        externalModules: ['aws-sdk'],
-      },
-    });
 
     // ==== Outputs ====
     new CfnOutput(this, 'GqlAuthorizerLambdaArn', {
