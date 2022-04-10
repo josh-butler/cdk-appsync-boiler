@@ -13,7 +13,6 @@ cdk.out
 
 # local dev
 .vscode
-events/
 .env.local.json
 Makefile.env
 invoke.out

@@ -27,8 +27,8 @@ endif
 
 define ENV_LOCAL_JSON
 {
-  "GetStatus": {
-    "EVENT_BUS_NAME": "test"
+  "GqlAuthorizer": {
+    "JWT_PUBLIC_KEY": "public-key-here"
   }
 }
 endef
@@ -36,8 +36,15 @@ export ENV_LOCAL_JSON
 
 define EVENT_LOCAL_JSON
 {
-    "httpMethod": "POST",
-    "body": "{\"id\": \"id1\",\"name\": \"name1\"}"
+    "authorizationToken": "ExampleAUTHtoken123123123",
+    "requestContext": {
+        "apiId": "aaaaaa123123123example123",
+        "accountId": "111122223333",
+        "requestId": "f4081827-1111-4444-5555-5cf4695f339f",
+        "queryString": "mutation CreateEvent {}",
+        "operationName": "MyQuery",
+        "variables": {}
+    }
 }
 endef
 export EVENT_LOCAL_JSON

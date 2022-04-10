@@ -103,6 +103,21 @@ export class CdkAppSyncBoilerStack extends Stack {
     // });
 
     // ==== Lambda ====
+    const gqlAuthorizer = new NodejsFunction(this, 'GqlAuthorizer', {
+      memorySize: 128,
+      timeout: Duration.seconds(30),
+      runtime: Runtime.NODEJS_14_X,
+      handler: 'handler',
+      entry: './src/handlers/gql-authorizer.ts',
+      environment: {
+        JWT_PUBLIC_KEY: '',
+      },
+      bundling: {
+        minify: true,
+        externalModules: ['aws-sdk'],
+      },
+    });
+
     const deviceGetResolver = new NodejsFunction(this, 'DeviceGetResolver', {
       memorySize: 128,
       timeout: Duration.seconds(30),
@@ -116,6 +131,11 @@ export class CdkAppSyncBoilerStack extends Stack {
     });
 
     // ==== Outputs ====
+    new CfnOutput(this, 'GqlAuthorizerLambdaArn', {
+      description: 'GqlAuthorizer Function ARN',
+      value: gqlAuthorizer.functionArn,
+    });
+
     new CfnOutput(this, 'DeviceGetResolverLambdaArn', {
       description: 'DeviceGetResolver Function ARN',
       value: deviceGetResolver.functionArn,
