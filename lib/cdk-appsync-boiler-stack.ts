@@ -2,15 +2,29 @@ import {CfnOutput, Duration, Stack, StackProps} from 'aws-cdk-lib';
 import {Construct} from 'constructs';
 import {Runtime} from 'aws-cdk-lib/aws-lambda';
 import {NodejsFunction} from 'aws-cdk-lib/aws-lambda-nodejs';
-
+import {CfnSecret} from 'aws-cdk-lib/aws-secretsmanager';
 import {RemovalPolicy} from 'aws-cdk-lib';
 import {Table, BillingMode, AttributeType} from 'aws-cdk-lib/aws-dynamodb';
 
+import * as iam from 'aws-cdk-lib/aws-iam';
 import * as appsync from '@aws-cdk/aws-appsync-alpha';
 
 export class CdkAppSyncBoilerStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
+
+    // ==== Secrets ====
+    const publicKeySecret = new CfnSecret(this, 'PublicKeySecret', {
+      name: 'app/jwt/publicKey',
+      description: 'JWT public key',
+      secretString: '',
+    });
+
+    const getPublicKeySecretPolicy = new iam.PolicyStatement({
+      effect: iam.Effect.ALLOW,
+      resources: [publicKeySecret.ref],
+      actions: ['secretsmanager:GetSecretValue'],
+    });
 
     // ==== DynamoDB ====
     const entityTable = new Table(this, 'EntityTable', {
@@ -35,13 +49,14 @@ export class CdkAppSyncBoilerStack extends Stack {
       handler: 'handler',
       entry: './src/handlers/gql-authorizer.ts',
       environment: {
-        JWT_PUBLIC_KEY: '',
+        SECRET_ID: publicKeySecret.ref,
       },
       bundling: {
         minify: true,
         externalModules: ['aws-sdk'],
       },
     });
+    gqlAuthorizer.addToRolePolicy(getPublicKeySecretPolicy);
 
     const deviceGetResolver = new NodejsFunction(this, 'DeviceGetResolver', {
       memorySize: 128,
