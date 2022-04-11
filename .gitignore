@@ -18,3 +18,4 @@ Makefile.env
 invoke.out
 coverage
 build
+events/

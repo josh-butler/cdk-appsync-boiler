@@ -14,10 +14,17 @@ export class CdkAppSyncBoilerStack extends Stack {
     super(scope, id, props);
 
     // ==== Secrets ====
+    // // manually populate this secret after initial stack deploy
+    // const privateKeySecret = new CfnSecret(this, 'PrivateKeySecret', {
+    //   name: 'app/jwt/privateKey',
+    //   description: 'JWT private key',
+    //   secretString: '',
+    // });
+
+    // manually populate this secret after initial stack deploy
     const publicKeySecret = new CfnSecret(this, 'PublicKeySecret', {
       name: 'app/jwt/publicKey',
       description: 'JWT public key',
-      secretString: '',
     });
 
     const getPublicKeySecretPolicy = new iam.PolicyStatement({
@@ -57,6 +64,10 @@ export class CdkAppSyncBoilerStack extends Stack {
       },
     });
     gqlAuthorizer.addToRolePolicy(getPublicKeySecretPolicy);
+    gqlAuthorizer.addPermission('appsync', {
+      principal: new iam.ServicePrincipal('appsync.amazonaws.com'),
+      action: 'lambda:InvokeFunction',
+    });
 
     const deviceGetResolver = new NodejsFunction(this, 'DeviceGetResolver', {
       memorySize: 128,
@@ -76,14 +87,13 @@ export class CdkAppSyncBoilerStack extends Stack {
       schema: appsync.Schema.fromAsset('./lib/schema.graphql'),
       authorizationConfig: {
         defaultAuthorization: {
-          authorizationType: appsync.AuthorizationType.API_KEY,
-
-          // authorizationType: appsync.AuthorizationType.LAMBDA,
-          // lambdaAuthorizerConfig: {
-          //   handler: gqlAuthorizer,
-          //   resultsCacheTtl: Duration.seconds(300),
-          //   validationRegex: '/(^[A-Za-z0-9-_]*\.[A-Za-z0-9-_]*\.[A-Za-z0-9-_]*$)/g' // eslint-disable-line
-          // },
+          authorizationType: appsync.AuthorizationType.LAMBDA,
+          lambdaAuthorizerConfig: {
+            handler: gqlAuthorizer,
+            resultsCacheTtl: Duration.seconds(300),
+            // block requests if Authorization header does not resemble a JWT
+            validationRegex: '^[A-Za-z0-9-_]*\\.[A-Za-z0-9-_]*\\.[A-Za-z0-9-_]*$' // eslint-disable-line
+          },
         },
       },
       xrayEnabled: false,
@@ -173,9 +183,9 @@ export class CdkAppSyncBoilerStack extends Stack {
       value: api.graphqlUrl,
     });
 
-    new CfnOutput(this, 'ApiKey', {
-      description: 'API Key',
-      value: api.apiKey || '',
-    });
+    // new CfnOutput(this, 'ApiKey', {
+    //   description: 'API Key',
+    //   value: api.apiKey || '',
+    // });
   }
 }

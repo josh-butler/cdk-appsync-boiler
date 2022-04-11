@@ -10,7 +10,10 @@ const sm = new SecretsManager({region});
 
 let publicKey: string;
 
-// const {JWT_PUBLIC_KEY = ''} = process.env;
+const logInfo = (message: string, params: any = {}) => {
+  const base = {type: 'GqlAuthorizer', message};
+  console.info(JSON.stringify({...base, ...params}));
+};
 
 const logErr = (message: string, params: any = {}) => {
   const base = {type: 'GqlAuthorizer', message};
@@ -30,9 +33,8 @@ const verifyJwt = async (token: string, pubkicKey: string) =>
 export const handler = async (
   event: AppSyncAuthorizerEvent
 ): Promise<AppSyncAuthorizerResult> => {
-  console.log(JSON.stringify(event));
+  console.log(JSON.stringify(event.requestContext));
 
-  // const pubkicKey = await getSecretData(sm, secretId);
   publicKey = publicKey || (await getSecretData(sm, secretId));
 
   let decoded;
@@ -45,6 +47,7 @@ export const handler = async (
   }
 
   const isAuthorized = decoded ? true : false;
+  logInfo('request evaluated', {isAuthorized});
 
   return {isAuthorized};
 };

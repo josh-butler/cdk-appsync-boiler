@@ -70,6 +70,9 @@ arm64: ## Enable local Linux OS ARM64 support
 codegen: ## Generate GraphQL code/types
 	cd $(ROOT_PATH)/lib && $(AMPLIFY) codegen
 
+join-multi-line:
+	awk -v ORS='\\n' '1' id_rsa.pub
+
 jwt-keys: ## generate private & public keys for JWT purposes
 	mkdir -p keys
 	cd keys && ssh-keygen -t rsa -b 4096 -m PEM -f id_rsa -q -N ""
