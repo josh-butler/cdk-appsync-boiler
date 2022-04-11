@@ -7,8 +7,8 @@ export const createDevice = /* GraphQL */ `
     createDevice(name: $name) {
       id
       name
-      createdAt
-      updatedAt
+      _ct
+      _md
     }
   }
 `;
@@ -16,10 +16,10 @@ export const createSensor = /* GraphQL */ `
   mutation CreateSensor($deviceId: ID!, $name: String!) {
     createSensor(deviceId: $deviceId, name: $name) {
       id
-      deviceId
+      pid
       name
-      createdAt
-      updatedAt
+      _ct
+      _md
     }
   }
 `;

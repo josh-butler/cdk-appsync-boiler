@@ -7,8 +7,8 @@ export const getDevice = /* GraphQL */ `
     getDevice(id: $id, limit: $limit) {
       id
       name
-      createdAt
-      updatedAt
+      _ct
+      _md
     }
   }
 `;
@@ -17,8 +17,8 @@ export const listDevices = /* GraphQL */ `
     listDevices {
       id
       name
-      createdAt
-      updatedAt
+      _ct
+      _md
     }
   }
 `;
@@ -27,10 +27,10 @@ export const getMoreSensors = /* GraphQL */ `
     getMoreSensors(deviceId: $deviceId, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        deviceId
+        pid
         name
-        createdAt
-        updatedAt
+        _ct
+        _md
       }
       nextToken
     }

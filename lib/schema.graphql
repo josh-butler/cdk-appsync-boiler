@@ -1,16 +1,16 @@
 type Device {
   id: ID!
   name: String
-  createdAt: AWSDateTime
-  updatedAt: AWSDateTime
+  _ct: AWSDateTime
+  _md: AWSDateTime
 }
 
 type Sensor {
   id: ID!
-  deviceId: ID!
+  pid: ID!
   name: String!
-  createdAt: AWSDateTime
-  updatedAt: AWSDateTime
+  _ct: AWSDateTime
+  _md: AWSDateTime
 }
 
 type DeviceConnection {

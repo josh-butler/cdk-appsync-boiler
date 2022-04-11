@@ -6,17 +6,17 @@ export type Device = {
   __typename: "Device",
   id: string,
   name?: string | null,
-  createdAt?: string | null,
-  updatedAt?: string | null,
+  _ct?: string | null,
+  _md?: string | null,
 };
 
 export type Sensor = {
   __typename: "Sensor",
   id: string,
-  deviceId: string,
+  pid: string,
   name: string,
-  createdAt?: string | null,
-  updatedAt?: string | null,
+  _ct?: string | null,
+  _md?: string | null,
 };
 
 export type SensorConnection = {
@@ -34,8 +34,8 @@ export type CreateDeviceMutation = {
     __typename: "Device",
     id: string,
     name?: string | null,
-    createdAt?: string | null,
-    updatedAt?: string | null,
+    _ct?: string | null,
+    _md?: string | null,
   } | null,
 };
 
@@ -48,10 +48,10 @@ export type CreateSensorMutation = {
   createSensor?:  {
     __typename: "Sensor",
     id: string,
-    deviceId: string,
+    pid: string,
     name: string,
-    createdAt?: string | null,
-    updatedAt?: string | null,
+    _ct?: string | null,
+    _md?: string | null,
   } | null,
 };
 
@@ -65,8 +65,8 @@ export type GetDeviceQuery = {
     __typename: "Device",
     id: string,
     name?: string | null,
-    createdAt?: string | null,
-    updatedAt?: string | null,
+    _ct?: string | null,
+    _md?: string | null,
   } | null,
 };
 
@@ -75,8 +75,8 @@ export type ListDevicesQuery = {
     __typename: "Device",
     id: string,
     name?: string | null,
-    createdAt?: string | null,
-    updatedAt?: string | null,
+    _ct?: string | null,
+    _md?: string | null,
   } | null > | null,
 };
 
@@ -92,10 +92,10 @@ export type GetMoreSensorsQuery = {
     items?:  Array< {
       __typename: "Sensor",
       id: string,
-      deviceId: string,
+      pid: string,
       name: string,
-      createdAt?: string | null,
-      updatedAt?: string | null,
+      _ct?: string | null,
+      _md?: string | null,
     } > | null,
     nextToken?: string | null,
   } | null,

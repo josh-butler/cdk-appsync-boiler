@@ -10,8 +10,8 @@
         "#sk": "sk"
       },
       "expressionValues": {
-        ":sk": $util.dynamodb.toDynamoDBJson("DEVICE#${context.args.deviceId}"),
         ":pk": $util.dynamodb.toDynamoDBJson("DEVICE#${context.args.deviceId}"),
+        ":sk": $util.dynamodb.toDynamoDBJson("DEVICE#${context.args.deviceId}#SENSOR#"),
       }
     },
     "limit" : $limit,

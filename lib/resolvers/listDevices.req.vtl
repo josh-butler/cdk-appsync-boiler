@@ -1,11 +1,11 @@
 {
     "version": "2017-02-28",
-    "index": "byTypeName",
+    "index": "GSI1",
     "operation": "Query",
     "query" : {
         "expression" : "#pk = :pk",
         "expressionNames" : {
-            "#pk" : "__typeName",
+            "#pk" : "_et",
         },
         "expressionValues" : {
             ":pk" : $util.dynamodb.toDynamoDBJson("DEVICE")
