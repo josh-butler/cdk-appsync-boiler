@@ -151,16 +151,16 @@ export class CdkAppSyncBoilerStack extends Stack {
       ),
     });
 
-    // deviceDS.createResolver({
-    //   typeName: 'Query',
-    //   fieldName: 'getMoreSensors',
-    //   requestMappingTemplate: appsync.MappingTemplate.fromFile(
-    //     './lib/resolvers/getMoreSensors.req.vtl'
-    //   ),
-    //   responseMappingTemplate: appsync.MappingTemplate.fromFile(
-    //     './lib/resolvers/getMoreSensors.res.vtl'
-    //   ),
-    // });
+    deviceDS.createResolver({
+      typeName: 'Query',
+      fieldName: 'getDeviceSensors',
+      requestMappingTemplate: appsync.MappingTemplate.fromFile(
+        './lib/resolvers/getDeviceSensors.req.vtl'
+      ),
+      responseMappingTemplate: appsync.MappingTemplate.fromFile(
+        './lib/resolvers/getDeviceSensors.res.vtl'
+      ),
+    });
 
     // ==== Outputs ====
     new CfnOutput(this, 'GqlAuthorizerLambdaArn', {

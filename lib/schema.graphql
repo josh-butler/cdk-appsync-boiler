@@ -31,5 +31,5 @@ type Mutation {
 type Query {
   getDevice(id: ID!, limit: Int): Device
   listDevices: [Device]
-  getMoreSensors(deviceId: ID!, limit: Int, nextToken: String): SensorConnection
+  getDeviceSensors(deviceId: ID!, limit: Int, nextToken: String): SensorConnection
 }

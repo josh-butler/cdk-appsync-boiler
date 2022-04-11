@@ -80,14 +80,14 @@ export type ListDevicesQuery = {
   } | null > | null,
 };
 
-export type GetMoreSensorsQueryVariables = {
+export type GetDeviceSensorsQueryVariables = {
   deviceId: string,
   limit?: number | null,
   nextToken?: string | null,
 };
 
-export type GetMoreSensorsQuery = {
-  getMoreSensors?:  {
+export type GetDeviceSensorsQuery = {
+  getDeviceSensors?:  {
     __typename: "SensorConnection",
     items?:  Array< {
       __typename: "Sensor",

@@ -22,9 +22,13 @@ export const listDevices = /* GraphQL */ `
     }
   }
 `;
-export const getMoreSensors = /* GraphQL */ `
-  query GetMoreSensors($deviceId: ID!, $limit: Int, $nextToken: String) {
-    getMoreSensors(deviceId: $deviceId, limit: $limit, nextToken: $nextToken) {
+export const getDeviceSensors = /* GraphQL */ `
+  query GetDeviceSensors($deviceId: ID!, $limit: Int, $nextToken: String) {
+    getDeviceSensors(
+      deviceId: $deviceId
+      limit: $limit
+      nextToken: $nextToken
+    ) {
       items {
         id
         pid
