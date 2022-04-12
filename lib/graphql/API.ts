@@ -70,6 +70,20 @@ export type GetDeviceQuery = {
   } | null,
 };
 
+export type GetDeviceFnQueryVariables = {
+  id: string,
+};
+
+export type GetDeviceFnQuery = {
+  getDeviceFn?:  {
+    __typename: "Device",
+    id: string,
+    name?: string | null,
+    _ct?: string | null,
+    _md?: string | null,
+  } | null,
+};
+
 export type ListDevicesQuery = {
   listDevices?:  Array< {
     __typename: "Device",

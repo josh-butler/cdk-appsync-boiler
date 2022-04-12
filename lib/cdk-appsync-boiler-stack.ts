@@ -75,11 +75,15 @@ export class CdkAppSyncBoilerStack extends Stack {
       runtime: Runtime.NODEJS_14_X,
       handler: 'handler',
       entry: './src/handlers/device-get-resolver.ts',
+      environment: {
+        ENTITY_TABLE: entityTable.tableName,
+      },
       bundling: {
         minify: true,
         externalModules: ['aws-sdk'],
       },
     });
+    entityTable.grantReadData(deviceGetResolver);
 
     // ==== AppSync ====
     const api = new appsync.GraphqlApi(this, 'Api', {
@@ -103,9 +107,19 @@ export class CdkAppSyncBoilerStack extends Stack {
       },
     });
 
+    // = Data Sources
     const deviceDS = api.addDynamoDbDataSource('DeviceDS', entityTable);
+    const deviceLambdaDS = api.addLambdaDataSource(
+      'DeviceLambdaDS',
+      deviceGetResolver
+    );
 
-    // = Devices
+    // = Resolvers
+    deviceLambdaDS.createResolver({
+      typeName: 'Query',
+      fieldName: 'getDeviceFn',
+    });
+
     deviceDS.createResolver({
       typeName: 'Mutation',
       fieldName: 'createDevice',

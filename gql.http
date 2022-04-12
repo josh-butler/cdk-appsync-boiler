@@ -1,0 +1,59 @@
+@apiUrl = {{$dotenv API_URL}}
+@token = {{$dotenv TOKEN}}
+
+### List Devices
+
+POST {{apiUrl}}
+Content-Type: application/json
+Authorization: {{token}}
+X-REQUEST-TYPE: GraphQL
+
+query {
+  listDevices {
+    id
+    name
+    _ct
+    _md
+  }
+}
+
+### GET Device
+
+POST {{apiUrl}}
+Content-Type: application/json
+Authorization: {{token}}
+X-REQUEST-TYPE: GraphQL
+
+query ($id: ID!, $limit: Int) {
+  getDevice(id: $id, limit: $limit) {
+    id
+    name
+    _ct
+    _md
+  }
+}
+
+{
+  "id": "32e2ece9-00e8-414a-99de-76d6fe446f25",
+  "limit": 10
+}
+
+### GET Device (Lambda Resolver)
+
+POST {{apiUrl}}
+Content-Type: application/json
+Authorization: {{token}}
+X-REQUEST-TYPE: GraphQL
+
+query ($id: ID!) {
+  getDeviceFn(id: $id) {
+    id
+    name
+    _ct
+    _md
+  }
+}
+
+{
+  "id": "32e2ece9-00e8-414a-99de-76d6fe446f25"
+}

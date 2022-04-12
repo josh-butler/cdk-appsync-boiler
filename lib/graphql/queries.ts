@@ -12,6 +12,16 @@ export const getDevice = /* GraphQL */ `
     }
   }
 `;
+export const getDeviceFn = /* GraphQL */ `
+  query GetDeviceFn($id: ID!) {
+    getDeviceFn(id: $id) {
+      id
+      name
+      _ct
+      _md
+    }
+  }
+`;
 export const listDevices = /* GraphQL */ `
   query ListDevices {
     listDevices {

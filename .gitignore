@@ -13,7 +13,7 @@ cdk.out
 
 # local dev
 .vscode
-.env.local.json
+.env*
 Makefile.env
 invoke.out
 coverage
