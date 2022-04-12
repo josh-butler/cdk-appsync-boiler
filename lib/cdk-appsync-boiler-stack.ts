@@ -85,6 +85,26 @@ export class CdkAppSyncBoilerStack extends Stack {
     });
     entityTable.grantReadData(deviceGetResolver);
 
+    /**
+     * Util function that generates a JWT using a private key stored
+     * in secrets manaager.
+     */
+    const generateJwt = new NodejsFunction(this, 'GenerateJwt', {
+      memorySize: 128,
+      timeout: Duration.seconds(30),
+      runtime: Runtime.NODEJS_14_X,
+      handler: 'handler',
+      entry: './src/handlers/generate-jwt.ts',
+      environment: {
+        SECRET_ID: publicKeySecret.ref, // live version should use private id
+      },
+      bundling: {
+        minify: true,
+        externalModules: ['aws-sdk'],
+      },
+    });
+    generateJwt.addToRolePolicy(getPublicKeySecretPolicy);
+
     // ==== AppSync ====
     const api = new appsync.GraphqlApi(this, 'Api', {
       name: 'IotData',
@@ -185,6 +205,11 @@ export class CdkAppSyncBoilerStack extends Stack {
     new CfnOutput(this, 'DeviceGetResolverLambdaArn', {
       description: 'DeviceGetResolver Function ARN',
       value: deviceGetResolver.functionArn,
+    });
+
+    new CfnOutput(this, 'GenerateJwtLambdaArn', {
+      description: 'GenerateJwt Function ARN',
+      value: generateJwt.functionArn,
     });
 
     new CfnOutput(this, 'ApiId', {
