@@ -1,6 +1,26 @@
 @apiUrl = {{$dotenv API_URL}}
 @token = {{$dotenv TOKEN}}
 
+### Create Device
+
+POST {{apiUrl}}
+Content-Type: application/json
+Authorization: {{token}}
+X-REQUEST-TYPE: GraphQL
+
+mutation ($name: String!) {
+  createDevice(name: $name) {
+    id
+    name
+    _ct
+    _md
+  }
+}
+
+{
+"name": "device-4"
+}
+
 ### List Devices
 
 POST {{apiUrl}}
