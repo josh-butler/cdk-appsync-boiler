@@ -18,7 +18,59 @@ mutation ($name: String!) {
 }
 
 {
-"name": "device-4"
+"name": "device-1"
+}
+
+### Create Sensor
+
+POST {{apiUrl}}
+Content-Type: application/json
+Authorization: {{token}}
+X-REQUEST-TYPE: GraphQL
+
+mutation ($deviceId: ID!, $name: String!) {
+  createSensor(deviceId: $deviceId, name: $name) {
+    id
+    pid
+    name
+    _ct
+    _md
+  }
+}
+
+{
+  "name": "sensor-0-1",
+  "deviceId": "9220af28-8363-45b1-96f7-5daf69dd666f"
+}
+
+### List Device Sensors
+
+POST {{apiUrl}}
+Content-Type: application/json
+Authorization: {{token}}
+X-REQUEST-TYPE: GraphQL
+
+query ($deviceId: ID!, $limit: Int, $nextToken: String) {
+  getDeviceSensors(
+    deviceId: $deviceId
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      pid
+      name
+      _ct
+      _md
+    }
+    nextToken
+  }
+}
+
+{
+  "limit": 10,
+  "deviceId": "9220af28-8363-45b1-96f7-5daf69dd666f",
+  "nextToken": null
 }
 
 ### List Devices
@@ -54,7 +106,7 @@ query ($id: ID!, $limit: Int) {
 }
 
 {
-  "id": "32e2ece9-00e8-414a-99de-76d6fe446f25",
+  "id": "9220af28-8363-45b1-96f7-5daf69dd666f",
   "limit": 10
 }
 
@@ -75,5 +127,5 @@ query ($id: ID!) {
 }
 
 {
-  "id": "32e2ece9-00e8-414a-99de-76d6fe446f25"
+  "id": "9220af28-8363-45b1-96f7-5daf69dd666f"
 }

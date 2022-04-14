@@ -2,6 +2,8 @@
 
 A CDK AppSync example API
 
+![API infra](docs/appsync-infra.jpg)
+
 ## API
 
 A GraphQL API provide by AWS AppSync. The [API types](lib/graphql/API.ts), [queries](lib/graphql/queries.ts) & [mutatations](lib/graphql/mutations.ts) are defined under `lib/graphql/`. These files are not required, but are a useful representation of the current API. Run `make codegen` whenever changes have been made to schema.graphql to automatically update the reference files mentioned above.
@@ -11,6 +13,9 @@ The [GraphQL schema](lib/schema.graphql) defines the data models & connections.
 
 ### GQL Resolvers
 Several example [VTL resolvers](lib/resolvers) are provided, which use DynamoDB as a data source. An example [Lambda Function resolver](src/handlers/device-get-resolver.ts) that also uses DynamoDB as a data soure is provide as well. 
+
+### Access Logs
+Access logs are automatically sent to a CloudWatch logs group named `/aws/appsync/apis/{ApiId}` 
 
 ## DynamoDB
 Each record is uniquely identified with `pk` & `sk` keys (partition & sort keys). In this case a `Device` is a parent entity to one or more `Sensor` entities.
@@ -68,6 +73,8 @@ Default environment variables used by the Makefile can be overwritten by creatin
 
 ```bash
 AWS_PROFILE=default
+LAMBDA_NAME=GenerateJwt
+LAMBDA_EVENT=events/event.json
 TEST_NAME=mytest
 ...
 ```
@@ -97,3 +104,21 @@ make test
 
 ESLint is used for static code analysis. It is configured to use `Google's TypeScript style guide` (gts).
 Run `make lint` to view a project level static code analysis.
+
+### Local Lambda Execution
+
+Lambda functions can be run locally during testing & development by running `make invoke` or `make invoke-out`
+
+#### Requirements
+* AWS SAM CLI
+* Docker
+* Make (installed by default in OSX)
+
+#### Process
+1. Run `make local-init` (only once)
+2. Choose the lambda to run by setting LAMBDA_NAME in `Makefile.env`
+3. Choose the event that will be sent to the lambda setting LAMBDA_EVENT in `Makefile.env`
+4. Run `make invoke-out`
+5. View resulting lambda execution logs in `invoke.out`
+
+#### [Sample Lambda Events Here](docs/lambda-events.md)

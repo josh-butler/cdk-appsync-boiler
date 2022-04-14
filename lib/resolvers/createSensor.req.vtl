@@ -5,7 +5,7 @@
   "operation": "PutItem",
   "key": {
     "pk": $util.dynamodb.toDynamoDBJson("DEVICE#${ctx.args.deviceId}"),
-    "sk": $util.dynamodb.toDynamoDBJson("DEVICE#${ctx.args.deviceId}#SENSOR#${id}"),
+    "sk": $util.dynamodb.toDynamoDBJson("SENSOR#${id}"),
   },
   "attributeValues": $util.dynamodb.toMapValuesJson({
     "id": $id,

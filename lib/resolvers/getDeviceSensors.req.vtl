@@ -11,7 +11,7 @@
       },
       "expressionValues": {
         ":pk": $util.dynamodb.toDynamoDBJson("DEVICE#${context.args.deviceId}"),
-        ":sk": $util.dynamodb.toDynamoDBJson("DEVICE#${context.args.deviceId}#SENSOR#"),
+        ":sk": $util.dynamodb.toDynamoDBJson("SENSOR#"),
       }
     },
     "limit" : $limit,
