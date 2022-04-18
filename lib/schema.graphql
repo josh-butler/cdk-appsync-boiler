@@ -1,3 +1,21 @@
+interface Node {
+  id: ID!
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+type Org implements Node {
+  id: ID!
+  name: String!
+  _ct: AWSDateTime
+  _md: AWSDateTime
+}
+
 type Device {
   id: ID!
   name: String
@@ -25,10 +43,12 @@ type SensorConnection {
 
 type Mutation {
   createDevice(name: String!): Device
+  createOrg(name: String!): Org
   createSensor(deviceId: ID!, name: String!): Sensor
 }
 
 type Query {
+  node(id: ID!): Node
   getDevice(id: ID!, limit: Int): Device
   getDeviceFn(id: ID!): Device
   listDevices: [Device]

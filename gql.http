@@ -1,6 +1,48 @@
 @apiUrl = {{$dotenv API_URL}}
 @token = {{$dotenv TOKEN}}
 
+### GET Node
+
+POST {{apiUrl}}
+Content-Type: application/json
+Authorization: {{token}}
+X-REQUEST-TYPE: GraphQL
+
+query Node($id: ID!) {
+  node(id: $id) {
+    id
+    ... on Org {
+      name
+      _ct
+      _md
+    }
+  }
+}
+
+{
+  "id": "eyJzayI6eyJTIjoiT1JHIzdhY2FmMmU4LTY4ZDgtNGM4Yi1iYTM0LTlhOWM1NTZiODk1YSJ9LCJwayI6eyJTIjoiT1JHIzdhY2FmMmU4LTY4ZDgtNGM4Yi1iYTM0LTlhOWM1NTZiODk1YSJ9fQ=="
+}
+
+### Create Org
+
+POST {{apiUrl}}
+Content-Type: application/json
+Authorization: {{token}}
+X-REQUEST-TYPE: GraphQL
+
+mutation ($name: String!) {
+  createOrg(name: $name) {
+    id
+    name
+    _ct
+    _md
+  }
+}
+
+{
+"name": "org-9"
+}
+
 ### Create Device
 
 POST {{apiUrl}}

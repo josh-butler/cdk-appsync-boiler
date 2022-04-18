@@ -10,6 +10,19 @@ export type Device = {
   _md?: string | null,
 };
 
+export type Org = {
+  __typename: "Org",
+  id: string,
+  name: string,
+  _ct?: string | null,
+  _md?: string | null,
+};
+
+export type Node = {
+  __typename: "Node",
+  id: string,
+};
+
 export type Sensor = {
   __typename: "Sensor",
   id: string,
@@ -39,6 +52,20 @@ export type CreateDeviceMutation = {
   } | null,
 };
 
+export type CreateOrgMutationVariables = {
+  name: string,
+};
+
+export type CreateOrgMutation = {
+  createOrg?:  {
+    __typename: "Org",
+    id: string,
+    name: string,
+    _ct?: string | null,
+    _md?: string | null,
+  } | null,
+};
+
 export type CreateSensorMutationVariables = {
   deviceId: string,
   name: string,
@@ -53,6 +80,31 @@ export type CreateSensorMutation = {
     _ct?: string | null,
     _md?: string | null,
   } | null,
+};
+
+export type OrgQuery = {
+  org?:  {
+    __typename: "Org",
+    id: string,
+    name: string,
+    _ct?: string | null,
+    _md?: string | null,
+  } | null,
+};
+
+export type NodeQueryVariables = {
+  id: string,
+};
+
+export type NodeQuery = {
+  node: ( {
+      __typename: "Org",
+      id: string,
+      name: string,
+      _ct?: string | null,
+      _md?: string | null,
+    }
+  ) | null,
 };
 
 export type GetDeviceQueryVariables = {

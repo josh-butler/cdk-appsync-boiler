@@ -12,6 +12,16 @@ export const createDevice = /* GraphQL */ `
     }
   }
 `;
+export const createOrg = /* GraphQL */ `
+  mutation CreateOrg($name: String!) {
+    createOrg(name: $name) {
+      id
+      name
+      _ct
+      _md
+    }
+  }
+`;
 export const createSensor = /* GraphQL */ `
   mutation CreateSensor($deviceId: ID!, $name: String!) {
     createSensor(deviceId: $deviceId, name: $name) {

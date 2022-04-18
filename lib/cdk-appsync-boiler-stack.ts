@@ -141,6 +141,28 @@ export class CdkAppSyncBoilerStack extends Stack {
     });
 
     deviceDS.createResolver({
+      typeName: 'Query',
+      fieldName: 'node',
+      requestMappingTemplate: appsync.MappingTemplate.fromFile(
+        './lib/resolvers/getNode.req.vtl'
+      ),
+      responseMappingTemplate: appsync.MappingTemplate.fromFile(
+        './lib/resolvers/getNode.res.vtl'
+      ),
+    });
+
+    deviceDS.createResolver({
+      typeName: 'Mutation',
+      fieldName: 'createOrg',
+      requestMappingTemplate: appsync.MappingTemplate.fromFile(
+        './lib/resolvers/createOrg.req.vtl'
+      ),
+      responseMappingTemplate: appsync.MappingTemplate.fromFile(
+        './lib/resolvers/createOrg.res.vtl'
+      ),
+    });
+
+    deviceDS.createResolver({
       typeName: 'Mutation',
       fieldName: 'createDevice',
       requestMappingTemplate: appsync.MappingTemplate.fromFile(
