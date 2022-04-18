@@ -164,6 +164,17 @@ export class CdkAppSyncBoilerStack extends Stack {
 
     deviceDS.createResolver({
       typeName: 'Mutation',
+      fieldName: 'createUser',
+      requestMappingTemplate: appsync.MappingTemplate.fromFile(
+        './lib/resolvers/createUser.req.vtl'
+      ),
+      responseMappingTemplate: appsync.MappingTemplate.fromFile(
+        './lib/resolvers/createUser.res.vtl'
+      ),
+    });
+
+    deviceDS.createResolver({
+      typeName: 'Mutation',
       fieldName: 'createDevice',
       requestMappingTemplate: appsync.MappingTemplate.fromFile(
         './lib/resolvers/createDevice.req.vtl'

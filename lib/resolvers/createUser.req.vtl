@@ -1,9 +1,10 @@
-#set($id = $util.autoId())
+#set($id = $util.autoUlid())
 #set($date = $util.time.nowISO8601())
 
-#set($pk = "ORG#${id}")
+#set($pk = "ORG#${ctx.args.orgId}")
+#set($sk = "USER#${id}")
 
-#set($key = $util.toJson($util.dynamodb.toMapValues({"pk": $pk, "sk": $pk})))
+#set($key = $util.toJson($util.dynamodb.toMapValues({"pk": $pk, "sk": $sk})))
 
 {
   "version": "2017-02-28",
@@ -12,8 +13,9 @@
   "attributeValues": $util.dynamodb.toMapValuesJson({
     "id": $util.base64Encode($key),
     "uid": $id,
-    "_et": "ORG",
-    "__typename": "Org",
+    "pid": $ctx.args.orgId,
+    "_et": "USER",
+    "__typename": "User",
     "name": $ctx.args.name,
     "_ct": $date,
     "_md": $date

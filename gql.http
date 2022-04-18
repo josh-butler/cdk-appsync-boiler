@@ -43,6 +43,29 @@ mutation ($name: String!) {
 "name": "org-9"
 }
 
+### Create User
+
+POST {{apiUrl}}
+Content-Type: application/json
+Authorization: {{token}}
+X-REQUEST-TYPE: GraphQL
+
+mutation CreateUser($orgId: ID!, $name: String!) {
+  createUser(orgId: $orgId, name: $name) {
+    id
+    uid
+    pid
+    name
+    _ct
+    _md
+  }
+}
+
+{
+"orgId": "7acaf2e8-68d8-4c8b-ba34-9a9c556b895a",
+"name": "user-9-0"
+}
+
 ### Create Device
 
 POST {{apiUrl}}

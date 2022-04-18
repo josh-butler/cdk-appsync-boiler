@@ -2,21 +2,19 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const org = /* GraphQL */ `
-  query Org {
-    org {
-      id
-      name
-      _ct
-      _md
-    }
-  }
-`;
 export const node = /* GraphQL */ `
   query Node($id: ID!) {
     node(id: $id) {
       id
       ... on Org {
+        uid
+        name
+        _ct
+        _md
+      }
+      ... on User {
+        uid
+        pid
         name
         _ct
         _md

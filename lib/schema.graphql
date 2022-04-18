@@ -11,6 +11,27 @@ type PageInfo {
 
 type Org implements Node {
   id: ID!
+  uid: ID!
+  name: String!
+  _ct: AWSDateTime
+  _md: AWSDateTime
+  users: UserConnection
+}
+
+type UserConnection {
+  edges: [UserEdge]
+  pageInfo: PageInfo!
+}
+
+type UserEdge {
+  cursor: String!
+  node: User
+}
+
+type User implements Node {
+  id: ID!
+  uid: ID!
+  pid: ID!
   name: String!
   _ct: AWSDateTime
   _md: AWSDateTime
@@ -42,8 +63,9 @@ type SensorConnection {
 }
 
 type Mutation {
-  createDevice(name: String!): Device
   createOrg(name: String!): Org
+  createUser(orgId: ID!, name: String!): User
+  createDevice(name: String!): Device
   createSensor(deviceId: ID!, name: String!): Sensor
 }
 
