@@ -152,6 +152,17 @@ export class CdkAppSyncBoilerStack extends Stack {
     });
 
     deviceDS.createResolver({
+      typeName: 'Query',
+      fieldName: 'users',
+      requestMappingTemplate: appsync.MappingTemplate.fromFile(
+        './lib/resolvers/getOrgUsers.req.vtl'
+      ),
+      responseMappingTemplate: appsync.MappingTemplate.fromFile(
+        './lib/resolvers/getOrgUsers.res.vtl'
+      ),
+    });
+
+    deviceDS.createResolver({
       typeName: 'Mutation',
       fieldName: 'createOrg',
       requestMappingTemplate: appsync.MappingTemplate.fromFile(
