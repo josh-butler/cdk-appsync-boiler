@@ -9,7 +9,6 @@ export type Org = {
   name: string,
   _ct?: string | null,
   _md?: string | null,
-  users?: UserConnection | null,
 };
 
 export type Node = {
@@ -25,26 +24,6 @@ export type User = {
   name: string,
   _ct?: string | null,
   _md?: string | null,
-};
-
-export type UserConnection = {
-  __typename: "UserConnection",
-  edges?:  Array<UserEdge | null > | null,
-  pageInfo: PageInfo,
-};
-
-export type UserEdge = {
-  __typename: "UserEdge",
-  cursor: string,
-  node?: User | null,
-};
-
-export type PageInfo = {
-  __typename: "PageInfo",
-  hasNextPage: boolean,
-  hasPreviousPage: boolean,
-  startCursor?: string | null,
-  endCursor?: string | null,
 };
 
 export type Device = {
@@ -68,6 +47,26 @@ export type SensorConnection = {
   __typename: "SensorConnection",
   items?:  Array<Sensor > | null,
   nextToken?: string | null,
+};
+
+export type UserConnection = {
+  __typename: "UserConnection",
+  edges?:  Array<UserEdge | null > | null,
+  pageInfo: PageInfo,
+};
+
+export type UserEdge = {
+  __typename: "UserEdge",
+  cursor: string,
+  node?: User | null,
+};
+
+export type PageInfo = {
+  __typename: "PageInfo",
+  hasNextPage: boolean,
+  hasPreviousPage: boolean,
+  startCursor?: string | null,
+  endCursor?: string | null,
 };
 
 export type CreateOrgMutationVariables = {
@@ -138,17 +137,17 @@ export type NodeQueryVariables = {
 
 export type NodeQuery = {
   node: ( {
-      __typename: "Org",
-      id: string,
-      uid: string,
-      name: string,
-      _ct?: string | null,
-      _md?: string | null,
-    } | {
       __typename: "User",
       id: string,
       uid: string,
       pid: string,
+      name: string,
+      _ct?: string | null,
+      _md?: string | null,
+    } | {
+      __typename: "Org",
+      id: string,
+      uid: string,
       name: string,
       _ct?: string | null,
       _md?: string | null,
@@ -213,5 +212,28 @@ export type GetDeviceSensorsQuery = {
       _md?: string | null,
     } > | null,
     nextToken?: string | null,
+  } | null,
+};
+
+export type UsersQueryVariables = {
+  orgId: string,
+  first: number,
+  after?: string | null,
+};
+
+export type UsersQuery = {
+  users?:  {
+    __typename: "UserConnection",
+    edges?:  Array< {
+      __typename: "UserEdge",
+      cursor: string,
+    } | null > | null,
+    pageInfo:  {
+      __typename: "PageInfo",
+      hasNextPage: boolean,
+      hasPreviousPage: boolean,
+      startCursor?: string | null,
+      endCursor?: string | null,
+    },
   } | null,
 };

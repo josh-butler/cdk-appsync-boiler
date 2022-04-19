@@ -1,4 +1,5 @@
-#set( $limit = $util.defaultIfNull($ctx.args.limit, 10))
+#set($limit = $util.defaultIfNull($ctx.args.first, 10))
+#set($after = $util.base64Dencode($ctx.args.after))
 
 {
     "version": "2017-02-28",
@@ -15,5 +16,5 @@
       }
     },
     "limit" : $limit,
-    "nextToken": $util.toJson($util.defaultIfNull($ctx.args.nextToken, null))
+    "nextToken": $after
 }

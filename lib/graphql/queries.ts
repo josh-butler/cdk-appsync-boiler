@@ -6,15 +6,15 @@ export const node = /* GraphQL */ `
   query Node($id: ID!) {
     node(id: $id) {
       id
-      ... on Org {
+      ... on User {
         uid
+        pid
         name
         _ct
         _md
       }
-      ... on User {
+      ... on Org {
         uid
-        pid
         name
         _ct
         _md
@@ -67,6 +67,21 @@ export const getDeviceSensors = /* GraphQL */ `
         _md
       }
       nextToken
+    }
+  }
+`;
+export const users = /* GraphQL */ `
+  query Users($orgId: ID!, $first: Int!, $after: String) {
+    users(orgId: $orgId, first: $first, after: $after) {
+      edges {
+        cursor
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
     }
   }
 `;

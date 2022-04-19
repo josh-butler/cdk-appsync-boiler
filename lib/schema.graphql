@@ -15,7 +15,6 @@ type Org implements Node {
   name: String!
   _ct: AWSDateTime
   _md: AWSDateTime
-  users: UserConnection
 }
 
 type UserConnection {
@@ -75,4 +74,5 @@ type Query {
   getDeviceFn(id: ID!): Device
   listDevices: [Device]
   getDeviceSensors(deviceId: ID!, limit: Int, nextToken: String): SensorConnection
+  users(orgId: ID!, first: Int!, after: String): UserConnection
 }
