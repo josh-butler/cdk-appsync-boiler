@@ -41,7 +41,7 @@ query ($id: ID!) {
     name
     _ct
     _md
-    users(first: 10) {
+    users(first: 2, after: "eyJzayI6eyJTIjoiVVNFUiMwMUcwWjZUQU5IUzM1SEtXMDZXMVZSRTdENSJ9LCJwayI6eyJTIjoiT1JHIzdhY2FmMmU4LTY4ZDgtNGM4Yi1iYTM0LTlhOWM1NTZiODk1YSJ9fQ==") {
       edges {
         cursor
         node { name }

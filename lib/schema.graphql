@@ -14,7 +14,7 @@ type Org implements Node {
   name: String!
   _ct: AWSDateTime
   _md: AWSDateTime
-  users(first: Int, after: String): UserConnection
+  users(first: Int, after: String, last: Int, before: String): UserConnection
 }
 
 type UserConnection {
