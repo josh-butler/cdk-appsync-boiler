@@ -1,7 +1,6 @@
 import {AppSyncResolverHandler} from 'aws-lambda';
-import {UsersQueryVariables} from '../../lib/graphql/API';
 
-import {base64, unBase64, parseJson} from '../common/util/util';
+import {unBase64, parseJson} from '../common/util/util';
 import {EntityTable} from '../common/util/ddb';
 
 const logInfo = (message: string, params: any = {}) => {
@@ -69,23 +68,15 @@ const getPageInfo = (res: any, edges: any) => {
   };
 };
 
-export const handler: AppSyncResolverHandler<
-  UsersQueryVariables,
-  any
-> = async event => {
+export const handler: AppSyncResolverHandler<any, any> = async (event: any) => {
   console.log(JSON.stringify(event));
 
   const {
-    arguments: {
-      orgId = '',
-      first = 10,
-      after = '',
-      last = 10,
-      before = '',
-    } = {},
+    arguments: {first = 10, after = '', last = 10, before = ''} = {},
+    source: {uid = ''} = {},
   } = event;
 
-  const {res} = await getUsers(orgId, first, after);
+  const {res} = await getUsers(uid, first, after);
   logInfo('ddb response', {res});
 
   console.log('res: ', res);

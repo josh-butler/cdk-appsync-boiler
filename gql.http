@@ -16,7 +16,8 @@ query Node($id: ID!) {
       _ct
       _md
       users {
-        ctx
+        edges
+        pageInfo
       }
     }
     ... on User {
@@ -38,14 +39,20 @@ Content-Type: application/json
 Authorization: {{token}}
 X-REQUEST-TYPE: GraphQL
 
-query Org($id: ID!) {
+query ($id: ID!) {
   org(id: $id) {
     id
     name
     _ct
     _md
-    users {
-      ctx
+    users(first: 10) {
+      edges {
+        cursor
+      }
+      pageInfo {
+        hasNextPage
+        startCursor
+      }
     }
   }
 }
