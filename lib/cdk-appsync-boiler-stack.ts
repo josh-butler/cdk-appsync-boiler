@@ -85,6 +85,22 @@ export class CdkAppSyncBoilerStack extends Stack {
     });
     entityTable.grantReadData(deviceGetResolver);
 
+    const usersGetResolver = new NodejsFunction(this, 'UsersGetResolver', {
+      memorySize: 128,
+      timeout: Duration.seconds(30),
+      runtime: Runtime.NODEJS_14_X,
+      handler: 'handler',
+      entry: './src/handlers/users-get-resolver.ts',
+      environment: {
+        ENTITY_TABLE: entityTable.tableName,
+      },
+      bundling: {
+        minify: true,
+        externalModules: ['aws-sdk'],
+      },
+    });
+    entityTable.grantReadData(usersGetResolver);
+
     /**
      * Util function that generates a JWT using a private key stored
      * in secrets manaager.
@@ -134,10 +150,20 @@ export class CdkAppSyncBoilerStack extends Stack {
       deviceGetResolver
     );
 
+    const usersLambdaDS = api.addLambdaDataSource(
+      'UsersLambdaDS',
+      usersGetResolver
+    );
+
     // = Resolvers
     deviceLambdaDS.createResolver({
       typeName: 'Query',
       fieldName: 'getDeviceFn',
+    });
+
+    usersLambdaDS.createResolver({
+      typeName: 'Org',
+      fieldName: 'users',
     });
 
     deviceDS.createResolver({
@@ -152,15 +178,37 @@ export class CdkAppSyncBoilerStack extends Stack {
     });
 
     deviceDS.createResolver({
-      typeName: 'Query',
-      fieldName: 'users',
+      typeName: 'UserEdge',
+      fieldName: 'node',
       requestMappingTemplate: appsync.MappingTemplate.fromFile(
-        './lib/resolvers/getOrgUsers.req.vtl'
+        './lib/resolvers/getUserNode.req.vtl'
       ),
       responseMappingTemplate: appsync.MappingTemplate.fromFile(
-        './lib/resolvers/getOrgUsers.res.vtl'
+        './lib/resolvers/getUserNode.res.vtl'
       ),
     });
+
+    deviceDS.createResolver({
+      typeName: 'Query',
+      fieldName: 'org',
+      requestMappingTemplate: appsync.MappingTemplate.fromFile(
+        './lib/resolvers/getOrg.req.vtl'
+      ),
+      responseMappingTemplate: appsync.MappingTemplate.fromFile(
+        './lib/resolvers/getOrg.res.vtl'
+      ),
+    });
+
+    // deviceDS.createResolver({
+    //   typeName: 'Query',
+    //   fieldName: 'users',
+    //   requestMappingTemplate: appsync.MappingTemplate.fromFile(
+    //     './lib/resolvers/getOrgUsers.req.vtl'
+    //   ),
+    //   responseMappingTemplate: appsync.MappingTemplate.fromFile(
+    //     './lib/resolvers/getOrgUsers.res.vtl'
+    //   ),
+    // });
 
     deviceDS.createResolver({
       typeName: 'Mutation',

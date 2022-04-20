@@ -13,6 +13,7 @@ const EntityTable = new Table({
   indexes: {
     GSI1: {partitionKey: '_et', sortKey: 'sk'},
   },
+  entityField: '__typename', // align w/ AppSync/GQL naming
   DocumentClient,
 });
 
@@ -27,4 +28,29 @@ const Device = new Entity({
   table: EntityTable,
 });
 
-export {EntityTable, Device};
+const Org = new Entity({
+  name: 'Org',
+  attributes: {
+    pk: {partitionKey: true},
+    sk: {sortKey: true},
+    id: {type: 'string'},
+    uid: {type: 'string'},
+    name: {type: 'string'},
+  },
+  table: EntityTable,
+});
+
+const User = new Entity({
+  name: 'User',
+  attributes: {
+    pk: {partitionKey: true},
+    sk: {sortKey: true},
+    id: {type: 'string'},
+    uid: {type: 'string'},
+    pid: {type: 'string'},
+    name: {type: 'string'},
+  },
+  table: EntityTable,
+});
+
+export {EntityTable, Device, Org, User};

@@ -137,6 +137,13 @@ export type NodeQueryVariables = {
 
 export type NodeQuery = {
   node: ( {
+      __typename: "Org",
+      id: string,
+      uid: string,
+      name: string,
+      _ct?: string | null,
+      _md?: string | null,
+    } | {
       __typename: "User",
       id: string,
       uid: string,
@@ -144,15 +151,23 @@ export type NodeQuery = {
       name: string,
       _ct?: string | null,
       _md?: string | null,
-    } | {
-      __typename: "Org",
-      id: string,
-      uid: string,
-      name: string,
-      _ct?: string | null,
-      _md?: string | null,
     }
   ) | null,
+};
+
+export type OrgQueryVariables = {
+  id: string,
+};
+
+export type OrgQuery = {
+  org?:  {
+    __typename: "Org",
+    id: string,
+    uid: string,
+    name: string,
+    _ct?: string | null,
+    _md?: string | null,
+  } | null,
 };
 
 export type GetDeviceQueryVariables = {

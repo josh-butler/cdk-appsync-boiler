@@ -10,6 +10,9 @@ export const createOrg = /* GraphQL */ `
       name
       _ct
       _md
+      users {
+        ctx
+      }
     }
   }
 `;
