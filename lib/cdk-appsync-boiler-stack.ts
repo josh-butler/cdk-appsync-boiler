@@ -101,6 +101,42 @@ export class CdkAppSyncBoilerStack extends Stack {
     });
     entityTable.grantReadData(usersGetResolver);
 
+    const nodeGetResolver = new NodejsFunction(this, 'NodeGetResolver', {
+      memorySize: 128,
+      timeout: Duration.seconds(30),
+      runtime: Runtime.NODEJS_14_X,
+      handler: 'handler',
+      entry: './src/handlers/node-get-resolver.ts',
+      environment: {
+        ENTITY_TABLE: entityTable.tableName,
+      },
+      bundling: {
+        minify: true,
+        externalModules: ['aws-sdk'],
+      },
+    });
+    entityTable.grantReadData(nodeGetResolver);
+
+    const nodeEdgeGetResolver = new NodejsFunction(
+      this,
+      'NodeEdgeGetResolver',
+      {
+        memorySize: 128,
+        timeout: Duration.seconds(30),
+        runtime: Runtime.NODEJS_14_X,
+        handler: 'handler',
+        entry: './src/handlers/node-edge-get-resolver.ts',
+        environment: {
+          ENTITY_TABLE: entityTable.tableName,
+        },
+        bundling: {
+          minify: true,
+          externalModules: ['aws-sdk'],
+        },
+      }
+    );
+    entityTable.grantReadData(nodeEdgeGetResolver);
+
     /**
      * Util function that generates a JWT using a private key stored
      * in secrets manaager.
@@ -155,6 +191,16 @@ export class CdkAppSyncBoilerStack extends Stack {
       usersGetResolver
     );
 
+    const nodeLambdaDS = api.addLambdaDataSource(
+      'NodeLambdaDS',
+      nodeGetResolver
+    );
+
+    const nodeEdgeLambdaDS = api.addLambdaDataSource(
+      'NodeEdgeLambdaDS',
+      nodeEdgeGetResolver
+    );
+
     // = Resolvers
     deviceLambdaDS.createResolver({
       typeName: 'Query',
@@ -166,27 +212,37 @@ export class CdkAppSyncBoilerStack extends Stack {
       fieldName: 'users',
     });
 
-    deviceDS.createResolver({
+    nodeLambdaDS.createResolver({
       typeName: 'Query',
       fieldName: 'node',
-      requestMappingTemplate: appsync.MappingTemplate.fromFile(
-        './lib/resolvers/getNode.req.vtl'
-      ),
-      responseMappingTemplate: appsync.MappingTemplate.fromFile(
-        './lib/resolvers/getNode.res.vtl'
-      ),
     });
 
-    deviceDS.createResolver({
+    nodeEdgeLambdaDS.createResolver({
       typeName: 'UserEdge',
       fieldName: 'node',
-      requestMappingTemplate: appsync.MappingTemplate.fromFile(
-        './lib/resolvers/getUserNode.req.vtl'
-      ),
-      responseMappingTemplate: appsync.MappingTemplate.fromFile(
-        './lib/resolvers/getUserNode.res.vtl'
-      ),
     });
+
+    // deviceDS.createResolver({
+    //   typeName: 'Query',
+    //   fieldName: 'node',
+    //   requestMappingTemplate: appsync.MappingTemplate.fromFile(
+    //     './lib/resolvers/getNode.req.vtl'
+    //   ),
+    //   responseMappingTemplate: appsync.MappingTemplate.fromFile(
+    //     './lib/resolvers/getNode.res.vtl'
+    //   ),
+    // });
+
+    // deviceDS.createResolver({
+    //   typeName: 'UserEdge',
+    //   fieldName: 'node',
+    //   requestMappingTemplate: appsync.MappingTemplate.fromFile(
+    //     './lib/resolvers/getUserNode.req.vtl'
+    //   ),
+    //   responseMappingTemplate: appsync.MappingTemplate.fromFile(
+    //     './lib/resolvers/getUserNode.res.vtl'
+    //   ),
+    // });
 
     deviceDS.createResolver({
       typeName: 'Query',

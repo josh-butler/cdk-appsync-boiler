@@ -15,10 +15,6 @@ query Node($id: ID!) {
       name
       _ct
       _md
-      users {
-        edges
-        pageInfo
-      }
     }
     ... on User {
       name
@@ -48,6 +44,7 @@ query ($id: ID!) {
     users(first: 10) {
       edges {
         cursor
+        node { name }
       }
       pageInfo {
         hasNextPage
