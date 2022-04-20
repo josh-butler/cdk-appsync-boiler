@@ -101,41 +101,43 @@ export class CdkAppSyncBoilerStack extends Stack {
     });
     entityTable.grantReadData(usersGetResolver);
 
-    const nodeGetResolver = new NodejsFunction(this, 'NodeGetResolver', {
-      memorySize: 128,
-      timeout: Duration.seconds(30),
-      runtime: Runtime.NODEJS_14_X,
-      handler: 'handler',
-      entry: './src/handlers/node-get-resolver.ts',
-      environment: {
-        ENTITY_TABLE: entityTable.tableName,
-      },
-      bundling: {
-        minify: true,
-        externalModules: ['aws-sdk'],
-      },
-    });
-    entityTable.grantReadData(nodeGetResolver);
+    // replaced w/ VTL - 1
+    // const nodeGetResolver = new NodejsFunction(this, 'NodeGetResolver', {
+    //   memorySize: 128,
+    //   timeout: Duration.seconds(30),
+    //   runtime: Runtime.NODEJS_14_X,
+    //   handler: 'handler',
+    //   entry: './src/handlers/node-get-resolver.ts',
+    //   environment: {
+    //     ENTITY_TABLE: entityTable.tableName,
+    //   },
+    //   bundling: {
+    //     minify: true,
+    //     externalModules: ['aws-sdk'],
+    //   },
+    // });
+    // entityTable.grantReadData(nodeGetResolver);
 
-    const nodeEdgeGetResolver = new NodejsFunction(
-      this,
-      'NodeEdgeGetResolver',
-      {
-        memorySize: 128,
-        timeout: Duration.seconds(30),
-        runtime: Runtime.NODEJS_14_X,
-        handler: 'handler',
-        entry: './src/handlers/node-edge-get-resolver.ts',
-        environment: {
-          ENTITY_TABLE: entityTable.tableName,
-        },
-        bundling: {
-          minify: true,
-          externalModules: ['aws-sdk'],
-        },
-      }
-    );
-    entityTable.grantReadData(nodeEdgeGetResolver);
+    // replaced w/ VTL - 2
+    // const nodeEdgeGetResolver = new NodejsFunction(
+    //   this,
+    //   'NodeEdgeGetResolver',
+    //   {
+    //     memorySize: 128,
+    //     timeout: Duration.seconds(30),
+    //     runtime: Runtime.NODEJS_14_X,
+    //     handler: 'handler',
+    //     entry: './src/handlers/node-edge-get-resolver.ts',
+    //     environment: {
+    //       ENTITY_TABLE: entityTable.tableName,
+    //     },
+    //     bundling: {
+    //       minify: true,
+    //       externalModules: ['aws-sdk'],
+    //     },
+    //   }
+    // );
+    // entityTable.grantReadData(nodeEdgeGetResolver);
 
     /**
      * Util function that generates a JWT using a private key stored
@@ -191,15 +193,17 @@ export class CdkAppSyncBoilerStack extends Stack {
       usersGetResolver
     );
 
-    const nodeLambdaDS = api.addLambdaDataSource(
-      'NodeLambdaDS',
-      nodeGetResolver
-    );
+    // // replaced w/ VTL - 1
+    // const nodeLambdaDS = api.addLambdaDataSource(
+    //   'NodeLambdaDS',
+    //   nodeGetResolver
+    // );
 
-    const nodeEdgeLambdaDS = api.addLambdaDataSource(
-      'NodeEdgeLambdaDS',
-      nodeEdgeGetResolver
-    );
+    // // replaced w/ VTL - 2
+    // const nodeEdgeLambdaDS = api.addLambdaDataSource(
+    //   'NodeEdgeLambdaDS',
+    //   nodeEdgeGetResolver
+    // );
 
     // = Resolvers
     deviceLambdaDS.createResolver({
