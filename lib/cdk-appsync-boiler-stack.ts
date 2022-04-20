@@ -212,37 +212,41 @@ export class CdkAppSyncBoilerStack extends Stack {
       fieldName: 'users',
     });
 
-    nodeLambdaDS.createResolver({
-      typeName: 'Query',
-      fieldName: 'node',
-    });
-
-    nodeEdgeLambdaDS.createResolver({
-      typeName: 'UserEdge',
-      fieldName: 'node',
-    });
-
-    // deviceDS.createResolver({
+    // replaced w/ VTL - 1
+    // nodeLambdaDS.createResolver({
     //   typeName: 'Query',
     //   fieldName: 'node',
-    //   requestMappingTemplate: appsync.MappingTemplate.fromFile(
-    //     './lib/resolvers/getNode.req.vtl'
-    //   ),
-    //   responseMappingTemplate: appsync.MappingTemplate.fromFile(
-    //     './lib/resolvers/getNode.res.vtl'
-    //   ),
     // });
 
-    // deviceDS.createResolver({
+    // replaced w/ VTL - 2
+    // nodeEdgeLambdaDS.createResolver({
     //   typeName: 'UserEdge',
     //   fieldName: 'node',
-    //   requestMappingTemplate: appsync.MappingTemplate.fromFile(
-    //     './lib/resolvers/getUserNode.req.vtl'
-    //   ),
-    //   responseMappingTemplate: appsync.MappingTemplate.fromFile(
-    //     './lib/resolvers/getUserNode.res.vtl'
-    //   ),
     // });
+
+    // Lambda option above - 1
+    deviceDS.createResolver({
+      typeName: 'Query',
+      fieldName: 'node',
+      requestMappingTemplate: appsync.MappingTemplate.fromFile(
+        './lib/resolvers/getNode.req.vtl'
+      ),
+      responseMappingTemplate: appsync.MappingTemplate.fromFile(
+        './lib/resolvers/getNode.res.vtl'
+      ),
+    });
+
+    // Lambda option above - 2
+    deviceDS.createResolver({
+      typeName: 'UserEdge',
+      fieldName: 'node',
+      requestMappingTemplate: appsync.MappingTemplate.fromFile(
+        './lib/resolvers/getUserNode.req.vtl'
+      ),
+      responseMappingTemplate: appsync.MappingTemplate.fromFile(
+        './lib/resolvers/getUserNode.res.vtl'
+      ),
+    });
 
     deviceDS.createResolver({
       typeName: 'Query',
