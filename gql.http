@@ -1,6 +1,106 @@
 @apiUrl = {{$dotenv API_URL}}
 @token = {{$dotenv TOKEN}}
 
+### GET Node
+
+POST {{apiUrl}}
+Content-Type: application/json
+Authorization: {{token}}
+X-REQUEST-TYPE: GraphQL
+
+query Node($id: ID!) {
+  node(id: $id) {
+    id
+    ... on Org {
+      name
+      _ct
+      _md
+    }
+    ... on User {
+      name
+      _ct
+      _md
+    }
+  }
+}
+
+{
+  "id": "eyJwayI6eyJTIjoiT1JHIzdhY2FmMmU4LTY4ZDgtNGM4Yi1iYTM0LTlhOWM1NTZiODk1YSJ9LCJzayI6eyJTIjoiT1JHIzdhY2FmMmU4LTY4ZDgtNGM4Yi1iYTM0LTlhOWM1NTZiODk1YSJ9fQ=="
+}
+
+### GET Org
+
+POST {{apiUrl}}
+Content-Type: application/json
+Authorization: {{token}}
+X-REQUEST-TYPE: GraphQL
+
+query ($id: ID!) {
+  org(id: $id) {
+    id
+    name
+    _ct
+    _md
+    users(first: 2, after: "eyJzayI6eyJTIjoiVVNFUiMwMUcwWjZUQU5IUzM1SEtXMDZXMVZSRTdENSJ9LCJwayI6eyJTIjoiT1JHIzdhY2FmMmU4LTY4ZDgtNGM4Yi1iYTM0LTlhOWM1NTZiODk1YSJ9fQ==") {
+      edges {
+        cursor
+        node { name }
+      }
+      pageInfo {
+        hasNextPage
+        startCursor
+      }
+    }
+  }
+}
+
+{
+  "id": "eyJwayI6eyJTIjoiT1JHIzdhY2FmMmU4LTY4ZDgtNGM4Yi1iYTM0LTlhOWM1NTZiODk1YSJ9LCJzayI6eyJTIjoiT1JHIzdhY2FmMmU4LTY4ZDgtNGM4Yi1iYTM0LTlhOWM1NTZiODk1YSJ9fQ=="
+}
+
+### Create Org
+
+POST {{apiUrl}}
+Content-Type: application/json
+Authorization: {{token}}
+X-REQUEST-TYPE: GraphQL
+
+mutation ($name: String!) {
+  createOrg(name: $name) {
+    id
+    name
+    _ct
+    _md
+  }
+}
+
+{
+"name": "org-9"
+}
+
+### Create User
+
+POST {{apiUrl}}
+Content-Type: application/json
+Authorization: {{token}}
+X-REQUEST-TYPE: GraphQL
+
+mutation CreateUser($orgId: ID!, $name: String!) {
+  createUser(orgId: $orgId, name: $name) {
+    id
+    uid
+    pid
+    name
+    _ct
+    _md
+  }
+}
+
+{
+"orgId": "7acaf2e8-68d8-4c8b-ba34-9a9c556b895a",
+"name": "user-9-2"
+}
+
 ### Create Device
 
 POST {{apiUrl}}

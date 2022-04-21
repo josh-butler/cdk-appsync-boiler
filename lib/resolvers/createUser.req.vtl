@@ -1,0 +1,30 @@
+#set($id = $util.autoUlid())
+#set($date = $util.time.nowISO8601())
+
+#set($pk = "ORG#${ctx.args.orgId}")
+#set($sk = "USER#${id}")
+
+#set($key = $util.toJson($util.dynamodb.toMapValues({"pk": $pk, "sk": $sk})))
+
+{
+  "version": "2017-02-28",
+  "operation": "PutItem",
+  "key": $key,
+  "attributeValues": $util.dynamodb.toMapValuesJson({
+    "id": $util.base64Encode($key),
+    "uid": $id,
+    "pid": $ctx.args.orgId,
+    "_et": "USER",
+    "__typename": "User",
+    "name": $ctx.args.name,
+    "_ct": $date,
+    "_md": $date
+  }),
+  "condition": {
+    "expression": "attribute_not_exists(#pk) and attribute_not_exists(#sk)",
+    "expressionNames": {
+      "#pk": "pk",
+      "#sk": "sk",
+    },
+  },
+}

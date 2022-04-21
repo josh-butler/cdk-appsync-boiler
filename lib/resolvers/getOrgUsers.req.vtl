@@ -1,0 +1,20 @@
+#set($limit = $util.defaultIfNull($ctx.args.first, 10))
+#set($after = $util.base64Dencode($ctx.args.after))
+
+{
+    "version": "2017-02-28",
+    "operation": "Query",
+    "query": {
+      "expression": "#pk = :pk and begins_with(#sk, :sk)",
+      "expressionNames": {
+        "#pk": "pk",
+        "#sk": "sk"
+      },
+      "expressionValues": {
+        ":pk": $util.dynamodb.toDynamoDBJson("ORG#${context.args.orgId}"),
+        ":sk": $util.dynamodb.toDynamoDBJson("USER#"),
+      }
+    },
+    "limit" : $limit,
+    "nextToken": $after
+}

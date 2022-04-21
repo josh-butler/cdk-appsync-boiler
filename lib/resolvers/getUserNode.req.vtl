@@ -1,0 +1,6 @@
+#set($key = $util.base64Decode($ctx.source.node.id))
+{
+    "version": "2017-02-28",
+    "operation": "GetItem",
+    "key" : $key
+}
