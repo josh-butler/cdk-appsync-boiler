@@ -1,4 +1,4 @@
-import {CfnOutput, Duration, Stack, StackProps} from 'aws-cdk-lib';
+import {CfnOutput, Duration, ScopedAws, Stack, StackProps} from 'aws-cdk-lib';
 import {Construct} from 'constructs';
 import {Runtime} from 'aws-cdk-lib/aws-lambda';
 import {NodejsFunction} from 'aws-cdk-lib/aws-lambda-nodejs';
@@ -12,6 +12,9 @@ import * as appsync from '@aws-cdk/aws-appsync-alpha';
 export class CdkAppSyncBoilerStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
+
+    // ==== Parameters ====
+    const {region, partition, accountId} = new ScopedAws(this);
 
     // ==== Secrets ====
     // // manually populate this secret after initial stack deploy
@@ -31,6 +34,31 @@ export class CdkAppSyncBoilerStack extends Stack {
       effect: iam.Effect.ALLOW,
       resources: [publicKeySecret.ref],
       actions: ['secretsmanager:GetSecretValue'],
+    });
+
+    // ==== SSM Params ====
+    const ssmParamPrefix = 'group/app/keys'; // param store dir to store all data source pwds under
+
+    const ssmParameterDescribePolicy = new iam.PolicyStatement({
+      effect: iam.Effect.ALLOW,
+      resources: ['*'],
+      actions: ['ssm:DescribeParameters'],
+    });
+
+    const ssmParameterCrudPolicy = new iam.PolicyStatement({
+      effect: iam.Effect.ALLOW,
+      resources: [
+        `arn:${partition}:ssm:${region}:${accountId}:parameter/${ssmParamPrefix}/*`,
+      ],
+      actions: [
+        'ssm:PutParameter',
+        'ssm:GetParameter',
+        'ssm:GetParameters',
+        'ssm:DeleteParameter',
+        'ssm:GetParameterHistory',
+        'ssm:DeleteParameters',
+        'ssm:GetParametersByPath',
+      ],
     });
 
     // ==== DynamoDB ====
@@ -100,6 +128,44 @@ export class CdkAppSyncBoilerStack extends Stack {
       },
     });
     entityTable.grantReadData(usersGetResolver);
+
+    const dataSourcePut = new NodejsFunction(this, 'DataSourcePut', {
+      memorySize: 128,
+      timeout: Duration.seconds(30),
+      runtime: Runtime.NODEJS_14_X,
+      handler: 'handler',
+      entry: './src/handlers/data-source-put.ts',
+      environment: {
+        ENTITY_TABLE: entityTable.tableName,
+        PARAMS_PREFIX: ssmParamPrefix,
+      },
+      bundling: {
+        minify: true,
+        externalModules: ['aws-sdk'],
+      },
+    });
+    entityTable.grantReadWriteData(dataSourcePut);
+    dataSourcePut.addToRolePolicy(ssmParameterDescribePolicy);
+    dataSourcePut.addToRolePolicy(ssmParameterCrudPolicy);
+
+    const dataSourceDelete = new NodejsFunction(this, 'DataSourceDelete', {
+      memorySize: 128,
+      timeout: Duration.seconds(30),
+      runtime: Runtime.NODEJS_14_X,
+      handler: 'handler',
+      entry: './src/handlers/data-source-put.ts',
+      environment: {
+        ENTITY_TABLE: entityTable.tableName,
+        PARAMS_PREFIX: ssmParamPrefix,
+      },
+      bundling: {
+        minify: true,
+        externalModules: ['aws-sdk'],
+      },
+    });
+    entityTable.grantReadWriteData(dataSourceDelete);
+    dataSourcePut.addToRolePolicy(ssmParameterDescribePolicy);
+    dataSourcePut.addToRolePolicy(ssmParameterCrudPolicy);
 
     // replaced w/ VTL - 1
     // const nodeGetResolver = new NodejsFunction(this, 'NodeGetResolver', {
@@ -366,6 +432,16 @@ export class CdkAppSyncBoilerStack extends Stack {
     new CfnOutput(this, 'GenerateJwtLambdaArn', {
       description: 'GenerateJwt Function ARN',
       value: generateJwt.functionArn,
+    });
+
+    new CfnOutput(this, 'DataSourcePutLambdaArn', {
+      description: 'DataSourcePut Function ARN',
+      value: dataSourcePut.functionArn,
+    });
+
+    new CfnOutput(this, 'DataSourceDeleteLambdaArn', {
+      description: 'DataSourceDelete Function ARN',
+      value: dataSourceDelete.functionArn,
     });
 
     new CfnOutput(this, 'ApiId', {
