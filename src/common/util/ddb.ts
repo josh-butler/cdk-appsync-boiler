@@ -11,9 +11,9 @@ const EntityTable = new Table({
   partitionKey: 'pk',
   sortKey: 'sk',
   indexes: {
-    GSI1: {partitionKey: '_et', sortKey: 'sk'},
+    GSI1: {partitionKey: 'GSI1pk', sortKey: 'GSI1sk'},
   },
-  entityField: '__typename', // align w/ AppSync/GQL naming
+  entityField: 'GSI1pk',
   DocumentClient,
 });
 
@@ -22,6 +22,7 @@ const Device = new Entity({
   attributes: {
     pk: {partitionKey: true},
     sk: {sortKey: true},
+    GSI1sk: {type: 'string'},
     id: {type: 'string'},
     name: {type: 'string'},
   },
@@ -33,6 +34,7 @@ const Org = new Entity({
   attributes: {
     pk: {partitionKey: true},
     sk: {sortKey: true},
+    GSI1sk: {type: 'string'},
     id: {type: 'string'},
     uid: {type: 'string'},
     name: {type: 'string'},
@@ -45,6 +47,7 @@ const User = new Entity({
   attributes: {
     pk: {partitionKey: true},
     sk: {sortKey: true},
+    GSI1sk: {type: 'string'},
     id: {type: 'string'},
     uid: {type: 'string'},
     pid: {type: 'string'},

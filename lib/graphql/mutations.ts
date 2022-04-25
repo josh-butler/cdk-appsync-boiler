@@ -8,11 +8,6 @@ export const createOrg = /* GraphQL */ `
       id
       uid
       name
-      _ct
-      _md
-      users {
-        ctx
-      }
     }
   }
 `;
@@ -23,8 +18,6 @@ export const createUser = /* GraphQL */ `
       uid
       pid
       name
-      _ct
-      _md
     }
   }
 `;
@@ -33,8 +26,6 @@ export const createDevice = /* GraphQL */ `
     createDevice(name: $name) {
       id
       name
-      _ct
-      _md
     }
   }
 `;
@@ -44,8 +35,6 @@ export const createSensor = /* GraphQL */ `
       id
       pid
       name
-      _ct
-      _md
     }
   }
 `;

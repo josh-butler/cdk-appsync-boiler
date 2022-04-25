@@ -11,16 +11,14 @@ type PageInfo {
 
 type Org implements Node {
   id: ID!
+  uid: ID!
   name: String!
-  _ct: AWSDateTime
-  _md: AWSDateTime
   users(first: Int, after: String, last: Int, before: String): UserConnection
 }
 
 type UserConnection {
   edges: [UserEdge]
   pageInfo: PageInfo!
-  ctx: String
 }
 
 type UserEdge {
@@ -30,16 +28,49 @@ type UserEdge {
 
 type User implements Node {
   id: ID!
+  uid: ID!
+  pid: ID!
   name: String!
-  _ct: AWSDateTime
-  _md: AWSDateTime
+}
+
+type Device {
+  id: ID!
+  name: String
+}
+
+type Sensor {
+  id: ID!
+  pid: ID!
+  name: String!
+}
+
+type DeviceConnection {
+  items: [Device]
+  nextToken: String
+}
+
+type SensorConnection {
+  items: [Sensor!]
+  nextToken: String
+}
+
+type Mutation {
+  createOrg(name: String!): Org
+  createUser(orgId: ID!, name: String!): User
+  createDevice(name: String!): Device
+  createSensor(deviceId: ID!, name: String!): Sensor
 }
 
 type Query {
+  getDevice(id: ID!, limit: Int): Device
+  getDeviceFn(id: ID!): Device
+  listDevices: [Device]
+  getDeviceSensors(deviceId: ID!, limit: Int, nextToken: String): SensorConnection
   org(id: ID!): Org
   node(id: ID!): Node
 }
 
 schema {
   query: Query
+  mutation: Mutation
 }

@@ -44,8 +44,8 @@ export class CdkAppSyncBoilerStack extends Stack {
 
     entityTable.addGlobalSecondaryIndex({
       indexName: 'GSI1',
-      partitionKey: {name: '_et', type: AttributeType.STRING},
-      sortKey: {name: 'sk', type: AttributeType.STRING},
+      partitionKey: {name: 'GSI1pk', type: AttributeType.STRING},
+      sortKey: {name: 'GSI1sk', type: AttributeType.STRING},
     });
 
     // ==== Lambda ====

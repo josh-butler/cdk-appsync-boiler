@@ -12,8 +12,8 @@
   "attributeValues": $util.dynamodb.toMapValuesJson({
     "id": $util.base64Encode($key),
     "uid": $id,
-    "_et": "ORG",
-    "__typename": "Org",
+    "GSI1pk": "ORG",
+    "GSI1sk": $pk,
     "name": $ctx.args.name,
     "_ct": $date,
     "_md": $date

@@ -19,16 +19,18 @@ Access logs are automatically sent to a CloudWatch logs group named `/aws/appsyn
 
 ## DynamoDB
 Each record is uniquely identified with `pk` & `sk` keys (partition & sort keys). In this case a `Device` is a parent entity to one or more `Sensor` entities.
+A global secondary index called `GSI1` is provided with `GSI1pk` & `GSI1sk` for the partition and sort keys. `GSI1pk` represents the Entity type (eg. DEVICE, SENSOR, etc)
 
 * A given device can be located by retrieving the only record that has both a pk & sk equal to `DEVICE#1234`
 * All sensors belonging to device `1234` can be found by querying for records that have a pk = `DEVICE#1234` and an sk beginning with `SENSOR#`
+* To get ALL Devices, query `GSI1` for an `GSI1pk` that equals `DEVICE`
 
 ### Entity Schema
-| entity  | pk  | sk |
-| ------------- | ------------- | ------------- |
-| Device  | DEVICE#1234 | DEVICE#1234 |
-| Sensor | DEVICE#1234 | SENSOR#3333 |
-| Sensor | DEVICE#1234 | SENSOR#4444 |
+| entity | pk          | sk          | GSI1pk |
+| ------ | ----------- | ----------- | ------ |
+| Device | DEVICE#1234 | DEVICE#1234 | DEVICE |
+| Sensor | DEVICE#1234 | SENSOR#3333 | SENSOR |
+| Sensor | DEVICE#1234 | SENSOR#4444 | SENSOR |
 
 ## Authentication
 The API is secured by a [Custom Lambda Authorizer](https://aws.amazon.com/blogs/mobile/appsync-lambda-auth/). The client must provide a valid JWT in the `Authorization` header. The authorizor only confirms that the JWT has been signed with the correct key, but additional claims could also be inspected/validated in the future.

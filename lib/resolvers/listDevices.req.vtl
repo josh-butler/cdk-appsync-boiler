@@ -5,7 +5,7 @@
     "query" : {
         "expression" : "#pk = :pk",
         "expressionNames" : {
-            "#pk" : "_et",
+            "#pk" : "GSI1pk",
         },
         "expressionValues" : {
             ":pk" : $util.dynamodb.toDynamoDBJson("DEVICE")

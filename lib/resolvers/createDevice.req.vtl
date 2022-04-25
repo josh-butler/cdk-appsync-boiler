@@ -9,7 +9,8 @@
   },
   "attributeValues": $util.dynamodb.toMapValuesJson({
     "id": $id,
-    "_et": "DEVICE",
+    "GSI1pk": "DEVICE",
+    "GSI1sk": "DEVICE#${id}",
     "name": $ctx.args.name,
     "_ct": $date,
     "_md": $date
