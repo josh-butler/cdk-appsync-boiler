@@ -1,4 +1,5 @@
 import {putSsmParam} from '../common/util/ssm';
+import {base64, ddbMarshal} from '../common/util/util';
 import {DataSource as DataSourceEntity} from '../common/util/ddb';
 
 import {fnResp200, fnResp400, fnResp500} from '../common/util/response';
@@ -38,9 +39,16 @@ class DataSource {
   }
 
   defaultProps() {
-    const {event: {user, password, expires} = {}} = this.args;
+    const {event: {user, password, expires, description: desc} = {}} =
+      this.args;
 
-    return {user, password, expires: parseDate(expires)};
+    const uid = user;
+    const pk = `DATASOURCE#${uid}`;
+    const id = base64(JSON.stringify(ddbMarshal({pk, sk: pk})));
+    const isoDate = parseDate(expires);
+    const paramName = `${paramsPrefix}/${user}`;
+
+    return {id, pk, user, desc, password, paramName, expires: isoDate};
   }
 
   get valid() {
@@ -48,15 +56,20 @@ class DataSource {
     return !!(user && password && expires);
   }
 
+  get paramId() {
+    const {paramName} = this.props;
+    const {Version = 0} = this.paramMeta;
+    return `${paramName}:${Version}`;
+  }
+
   async putParam() {
     let err;
     let res;
 
-    const {user, password} = this.props;
-    const params = {Name: `${paramsPrefix}/${user}`, Value: password};
+    const {paramName, password} = this.props;
 
     try {
-      res = await putSsmParam(params);
+      res = await putSsmParam({Name: paramName, Value: password});
     } catch (error) {
       logErr('ssm param put failed', {error});
       err = error;
@@ -67,30 +80,36 @@ class DataSource {
     return err ? fnResp500([err]) : null;
   }
 
-  // async putDataSource() {
-  //   const {
-  //     pk, sk, id, idx, url, uri, cat,
-  //   } = this.props;
+  async putDataSource() {
+    const {pk, id, uid, desc} = this.props;
+    let err;
 
-  //   const {
-  //     duration,
-  //     pixelDomains: pixels,
-  //     adId: aid,
-  //     creativeId: cid,
-  //     creativeAdId: caid,
-  //     mediaFiles: files,
-  //   } = this;
+    const item = {
+      pk,
+      sk: pk,
+      GSI1sk: pk,
+      id,
+      uid,
+      desc,
+      param: this.paramId,
+    };
 
-  //   const item = {
-  //     pk, sk, id, idx, url, uri, cat, duration, aid, cid, caid, pixels, files,
-  //   };
+    logInfo('ddb put', {item});
 
-  //   return DataSourceEntity.put(item);
-  // }
+    try {
+      await DataSourceEntity.put(item);
+    } catch (error) {
+      logErr('ddb put failed', {error});
+      err = error;
+    }
+
+    return err
+      ? fnResp500([err])
+      : fnResp200({message: 'data source entity updated', item});
+  }
 
   async put() {
     const {user, password, expires} = this.props;
-    console.log('this.props: ', this.props);
 
     if (!this.valid) {
       logErr('invalid request', {
@@ -102,12 +121,11 @@ class DataSource {
     }
 
     const paramErrResp = await this.putParam();
-    console.log('this.paramMeta: ', this.paramMeta);
     if (paramErrResp) {
       return paramErrResp;
     }
 
-    return null;
+    return this.putDataSource();
   }
 }
 

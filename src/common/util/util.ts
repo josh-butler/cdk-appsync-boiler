@@ -1,3 +1,4 @@
+import {DynamoDB} from 'aws-sdk';
 import * as _crypto from 'crypto';
 
 // returns a V4 UUID
@@ -6,6 +7,10 @@ const uuid = () => _crypto.randomUUID();
 const base64 = (str: string) => Buffer.from(str).toString('base64');
 
 const unBase64 = (str: string) => Buffer.from(str, 'base64').toString('utf8');
+
+const ddbMarshal = (data: Object) => DynamoDB.Converter.marshall(data);
+
+const ddbUnmarshal = (data: any) => DynamoDB.Converter.unmarshall(data);
 
 const parseJson = (str: string) => {
   let data = {};
@@ -18,4 +23,4 @@ const parseJson = (str: string) => {
   return data;
 };
 
-export {parseJson, uuid, base64, unBase64};
+export {parseJson, uuid, base64, unBase64, ddbMarshal, ddbUnmarshal};
