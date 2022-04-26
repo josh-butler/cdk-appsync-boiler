@@ -1,6 +1,7 @@
 import {putSsmParam} from '../common/util/ssm';
+import {DataSource as DataSourceEntity} from '../common/util/ddb';
 
-import {fnResp200, fnResp400} from '../common/util/response';
+import {fnResp200, fnResp400, fnResp500} from '../common/util/response';
 
 import config from '../common/config';
 
@@ -29,6 +30,7 @@ interface DataSourceArgs {
 class DataSource {
   args: DataSourceArgs;
   props: any;
+  paramMeta: any;
 
   constructor(args: DataSourceArgs) {
     this.args = args;
@@ -46,26 +48,44 @@ class DataSource {
     return !!(user && password && expires);
   }
 
-  // async putParam() {
-  //   let err;
-  //   let result;
-  //   let data = [];
-  //   const {user, password} = this.props;
+  async putParam() {
+    let err;
+    let res;
 
-  //   try {
-  //     result = await EntityTable.query(GSI1pk, { index: 'GSI1' });
-  //   } catch (e) {
-  //     console.error(e);
-  //     err = e;
-  //   }
+    const {user, password} = this.props;
+    const params = {Name: `${paramsPrefix}/${user}`, Value: password};
 
-  //   if (result) {
-  //     const { Items = [] } = result;
-  //     const sorted = Items.sort((a, b) => b.modified - a.modified);
-  //     data = sorted.map(imageAttrs);
-  //   }
+    try {
+      res = await putSsmParam(params);
+    } catch (error) {
+      logErr('ssm param put failed', {error});
+      err = error;
+    }
 
-  //   return err ? resp500({ message: err.message }) : resp200(data);
+    this.paramMeta = res;
+
+    return err ? fnResp500([err]) : null;
+  }
+
+  // async putDataSource() {
+  //   const {
+  //     pk, sk, id, idx, url, uri, cat,
+  //   } = this.props;
+
+  //   const {
+  //     duration,
+  //     pixelDomains: pixels,
+  //     adId: aid,
+  //     creativeId: cid,
+  //     creativeAdId: caid,
+  //     mediaFiles: files,
+  //   } = this;
+
+  //   const item = {
+  //     pk, sk, id, idx, url, uri, cat, duration, aid, cid, caid, pixels, files,
+  //   };
+
+  //   return DataSourceEntity.put(item);
   // }
 
   async put() {
@@ -79,6 +99,12 @@ class DataSource {
         password: password ? '####' : null,
       });
       return fnResp400([{message: 'invalid request'}]);
+    }
+
+    const paramErrResp = await this.putParam();
+    console.log('this.paramMeta: ', this.paramMeta);
+    if (paramErrResp) {
+      return paramErrResp;
     }
 
     return null;

@@ -26,7 +26,7 @@ export class CdkAppSyncBoilerStack extends Stack {
 
     // manually populate this secret after initial stack deploy
     const publicKeySecret = new CfnSecret(this, 'PublicKeySecret', {
-      name: 'app/jwt/publicKey',
+      name: '/app/jwt/publicKey',
       description: 'JWT public key',
     });
 

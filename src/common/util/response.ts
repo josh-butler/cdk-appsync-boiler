@@ -7,4 +7,8 @@ const fnResp400 = (errors: Array<any>) => {
   return {code: 400, error: {errors}};
 };
 
-export {fnResp200, fnResp400};
+const fnResp500 = (errors: Array<any>) => {
+  return {code: 400, error: {errors}};
+};
+
+export {fnResp200, fnResp400, fnResp500};

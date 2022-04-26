@@ -56,4 +56,18 @@ const User = new Entity({
   table: EntityTable,
 });
 
-export {EntityTable, Device, Org, User};
+const DataSource = new Entity({
+  name: 'DATASOURCE',
+  attributes: {
+    pk: {partitionKey: true},
+    sk: {sortKey: true},
+    GSI1sk: {type: 'string'},
+    id: {type: 'string'},
+    uid: {type: 'string', alias: 'name'},
+    desc: {type: 'string', alias: 'description'},
+    param: {type: 'string'},
+  },
+  table: EntityTable,
+});
+
+export {EntityTable, Device, Org, User, DataSource};
