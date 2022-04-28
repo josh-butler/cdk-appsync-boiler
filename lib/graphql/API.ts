@@ -181,6 +181,22 @@ export type OrgQuery = {
   } | null,
 };
 
+export type GetOrgsQueryVariables = {
+  first?: number | null,
+  after?: string | null,
+  last?: number | null,
+  before?: string | null,
+};
+
+export type GetOrgsQuery = {
+  getOrgs?:  Array< {
+    __typename: "Org",
+    id: string,
+    uid: string,
+    name: string,
+  } | null > | null,
+};
+
 export type NodeQueryVariables = {
   id: string,
 };

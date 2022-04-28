@@ -67,6 +67,7 @@ type Query {
   listDevices: [Device]
   getDeviceSensors(deviceId: ID!, limit: Int, nextToken: String): SensorConnection
   org(id: ID!): Org
+  getOrgs(first: Int, after: String, last: Int, before: String): [Org]
   node(id: ID!): Node
 }
 

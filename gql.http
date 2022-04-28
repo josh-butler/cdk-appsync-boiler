@@ -58,6 +58,25 @@ query ($id: ID!) {
   "id": "eyJwayI6eyJTIjoiT1JHIzdhY2FmMmU4LTY4ZDgtNGM4Yi1iYTM0LTlhOWM1NTZiODk1YSJ9LCJzayI6eyJTIjoiT1JHIzdhY2FmMmU4LTY4ZDgtNGM4Yi1iYTM0LTlhOWM1NTZiODk1YSJ9fQ=="
 }
 
+### GET Orgs
+
+POST {{apiUrl}}
+Content-Type: application/json
+Authorization: {{token}}
+X-REQUEST-TYPE: GraphQL
+
+query GetOrgs($first: Int, $after: String, $last: Int, $before: String) {
+  getOrgs(first: $first, after: $after, last: $last, before: $before) {
+    id
+    uid
+    name
+  }
+}
+
+{
+  "first": 2
+}
+
 ### Create Org
 
 POST {{apiUrl}}
@@ -73,7 +92,7 @@ mutation ($name: String!) {
 }
 
 {
-"name": "org-2"
+"name": "org-6"
 }
 
 ### Create User
