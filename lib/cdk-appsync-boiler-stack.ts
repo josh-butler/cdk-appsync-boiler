@@ -37,7 +37,7 @@ export class CdkAppSyncBoilerStack extends Stack {
     });
 
     // ==== SSM Params ====
-    const ssmParamPrefix = 'group/app/keys'; // param store dir to store all data source pwds under
+    const ssmParamPrefix = '/group/app/keys'; // param store dir to store all data source pwds under
 
     const ssmParameterDescribePolicy = new iam.PolicyStatement({
       effect: iam.Effect.ALLOW,
@@ -48,7 +48,7 @@ export class CdkAppSyncBoilerStack extends Stack {
     const ssmParameterCrudPolicy = new iam.PolicyStatement({
       effect: iam.Effect.ALLOW,
       resources: [
-        `arn:${partition}:ssm:${region}:${accountId}:parameter/${ssmParamPrefix}/*`,
+        `arn:${partition}:ssm:${region}:${accountId}:parameter${ssmParamPrefix}/*`,
       ],
       actions: [
         'ssm:PutParameter',
@@ -153,7 +153,7 @@ export class CdkAppSyncBoilerStack extends Stack {
       timeout: Duration.seconds(30),
       runtime: Runtime.NODEJS_14_X,
       handler: 'handler',
-      entry: './src/handlers/data-source-put.ts',
+      entry: './src/handlers/data-source-delete.ts',
       environment: {
         ENTITY_TABLE: entityTable.tableName,
         PARAMS_PREFIX: ssmParamPrefix,

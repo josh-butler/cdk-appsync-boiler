@@ -12,22 +12,8 @@ const putSsmParam = async ({Name = '', Value = ''}) => {
   return ssm.putParameter(params).promise();
 };
 
-// const listS3Keys = async (Bucket, Prefix) => {
-//   let res;
-//   let data = [];
+const deleteSsmParam = async ({Name = ''}) => {
+  return ssm.deleteParameter({Name}).promise();
+};
 
-//   try {
-//     res = await listS3Objects(Bucket, Prefix);
-//   } catch (e) {
-//     console.error(e);
-//   }
-
-//   if (res) {
-//     const { Contents = [] } = res;
-//     data = Contents.filter(i => i.Size).map(i => i.Key);
-//   }
-
-//   return data;
-// };
-
-export {putSsmParam};
+export {deleteSsmParam, putSsmParam};

@@ -1,7 +1,6 @@
 import {putSsmParam} from '../common/util/ssm';
 import {base64, ddbMarshal} from '../common/util/util';
 import {DataSource as DataSourceEntity} from '../common/util/ddb';
-
 import {fnResp200, fnResp400, fnResp500} from '../common/util/response';
 
 import config from '../common/config';
@@ -28,7 +27,7 @@ interface DataSourceArgs {
   event: any;
 }
 
-class DataSource {
+class DataSourcePut {
   args: DataSourceArgs;
   props: any;
   paramMeta: any;
@@ -66,10 +65,11 @@ class DataSource {
     let err;
     let res;
 
-    const {paramName, password} = this.props;
+    const {paramName: Name, password} = this.props;
 
+    logInfo('ssm param put', {Name});
     try {
-      res = await putSsmParam({Name: paramName, Value: password});
+      res = await putSsmParam({Name, Value: password});
     } catch (error) {
       logErr('ssm param put failed', {error});
       err = error;
@@ -112,7 +112,7 @@ class DataSource {
     const {user, password, expires} = this.props;
 
     if (!this.valid) {
-      logErr('invalid request', {
+      logErr('invalid parameters', {
         user,
         expires,
         password: password ? '####' : null,
@@ -132,7 +132,7 @@ class DataSource {
 export const handler = async (event: any) => {
   console.log(JSON.stringify({...event, password: '####'})); // mask password
 
-  const ds = new DataSource({event});
+  const ds = new DataSourcePut({event});
 
   return ds.put();
 };
