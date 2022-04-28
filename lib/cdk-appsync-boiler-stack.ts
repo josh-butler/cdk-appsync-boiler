@@ -319,6 +319,17 @@ export class CdkAppSyncBoilerStack extends Stack {
     });
 
     deviceDS.createResolver({
+      typeName: 'OrgEdge',
+      fieldName: 'node',
+      requestMappingTemplate: appsync.MappingTemplate.fromFile(
+        './lib/resolvers/getOrgNode.req.vtl'
+      ),
+      responseMappingTemplate: appsync.MappingTemplate.fromFile(
+        './lib/resolvers/getOrgNode.res.vtl'
+      ),
+    });
+
+    deviceDS.createResolver({
       typeName: 'Query',
       fieldName: 'org',
       requestMappingTemplate: appsync.MappingTemplate.fromFile(

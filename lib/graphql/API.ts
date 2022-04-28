@@ -62,6 +62,12 @@ export type SensorConnection = {
   nextToken?: string | null,
 };
 
+export type OrgConnection = {
+  __typename: "OrgConnection",
+  edges?:  Array<UserEdge | null > | null,
+  pageInfo: PageInfo,
+};
+
 export type CreateOrgMutationVariables = {
   name: string,
 };
@@ -189,12 +195,20 @@ export type GetOrgsQueryVariables = {
 };
 
 export type GetOrgsQuery = {
-  getOrgs?:  Array< {
-    __typename: "Org",
-    id: string,
-    uid: string,
-    name: string,
-  } | null > | null,
+  getOrgs?:  {
+    __typename: "OrgConnection",
+    edges?:  Array< {
+      __typename: "UserEdge",
+      cursor: string,
+    } | null > | null,
+    pageInfo:  {
+      __typename: "PageInfo",
+      hasNextPage: boolean,
+      hasPreviousPage: boolean,
+      startCursor?: string | null,
+      endCursor?: string | null,
+    },
+  } | null,
 };
 
 export type NodeQueryVariables = {

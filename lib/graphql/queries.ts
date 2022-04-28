@@ -54,9 +54,15 @@ export const org = /* GraphQL */ `
 export const getOrgs = /* GraphQL */ `
   query GetOrgs($first: Int, $after: String, $last: Int, $before: String) {
     getOrgs(first: $first, after: $after, last: $last, before: $before) {
-      id
-      uid
-      name
+      edges {
+        cursor
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
     }
   }
 `;
