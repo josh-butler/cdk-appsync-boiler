@@ -1,4 +1,5 @@
-#set($key = $util.base64Decode($ctx.args.id))
+#set($pk = "ORG#${ctx.args.uid}")
+#set($key = $util.toJson($util.dynamodb.toMapValues({"pk": $pk, "sk": $pk})))
 {
     "version": "2017-02-28",
     "operation": "GetItem",

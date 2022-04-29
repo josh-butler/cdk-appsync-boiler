@@ -356,9 +356,21 @@ export class CdkAppSyncBoilerStack extends Stack {
       ),
     });
 
+    // TODO can be removed?
     deviceDS.createResolver({
       typeName: 'Query',
       fieldName: 'org',
+      requestMappingTemplate: appsync.MappingTemplate.fromFile(
+        './lib/resolvers/org.req.vtl'
+      ),
+      responseMappingTemplate: appsync.MappingTemplate.fromFile(
+        './lib/resolvers/org.res.vtl'
+      ),
+    });
+
+    deviceDS.createResolver({
+      typeName: 'Query',
+      fieldName: 'getOrg',
       requestMappingTemplate: appsync.MappingTemplate.fromFile(
         './lib/resolvers/getOrg.req.vtl'
       ),

@@ -28,6 +28,25 @@ query Node($id: ID!) {
   "id": "eyJwayI6eyJTIjoiT1JHIzdhY2FmMmU4LTY4ZDgtNGM4Yi1iYTM0LTlhOWM1NTZiODk1YSJ9LCJzayI6eyJTIjoiT1JHIzdhY2FmMmU4LTY4ZDgtNGM4Yi1iYTM0LTlhOWM1NTZiODk1YSJ9fQ=="
 }
 
+### GET Org (uid)
+
+POST {{apiUrl}}
+Content-Type: application/json
+Authorization: {{token}}
+X-REQUEST-TYPE: GraphQL
+
+query GetOrg($uid: ID!) {
+  getOrg(uid: $uid) {
+    id
+    name
+    uid
+  }
+}
+
+{
+  "uid": "4179c7a3-2d4a-4696-8a09-c05fd521d92d"
+}
+
 ### GET Org
 
 POST {{apiUrl}}
@@ -39,23 +58,12 @@ query ($id: ID!) {
   org(id: $id) {
     id
     name
-    _ct
-    _md
-    users(first: 3, after: "eyJzayI6eyJTIjoiVVNFUiMwMUcwWjZUQU5IUzM1SEtXMDZXMVZSRTdENSJ9LCJwayI6eyJTIjoiT1JHIzdhY2FmMmU4LTY4ZDgtNGM4Yi1iYTM0LTlhOWM1NTZiODk1YSJ9fQ==") {
-      edges {
-        cursor
-        node { name, id }
-      }
-      pageInfo {
-        hasNextPage
-        startCursor
-      }
-    }
+    uid
   }
 }
 
 {
-  "id": "eyJwayI6eyJTIjoiT1JHIzdhY2FmMmU4LTY4ZDgtNGM4Yi1iYTM0LTlhOWM1NTZiODk1YSJ9LCJzayI6eyJTIjoiT1JHIzdhY2FmMmU4LTY4ZDgtNGM4Yi1iYTM0LTlhOWM1NTZiODk1YSJ9fQ=="
+  "id": "eyJHU0kxcGsiOnsiTSI6eyJTIjp7IlMiOiJPUkcifX19LCJzayI6eyJNIjp7IlMiOnsiUyI6Ik9SRyMwMWYzMzFkNC0zYTk2LTQ4NTQtOTNmMS1iODU0NzBkZjQxZDEifX19LCJHU0kxc2siOnsiTSI6eyJTIjp7IlMiOiJPUkcjMDFmMzMxZDQtM2E5Ni00ODU0LTkzZjEtYjg1NDcwZGY0MWQxIn19fSwicGsiOnsiTSI6eyJTIjp7IlMiOiJPUkcjMDFmMzMxZDQtM2E5Ni00ODU0LTkzZjEtYjg1NDcwZGY0MWQxIn19fX0="
 }
 
 ### GET Orgs

@@ -51,6 +51,15 @@ export const org = /* GraphQL */ `
     }
   }
 `;
+export const getOrg = /* GraphQL */ `
+  query GetOrg($uid: ID!) {
+    getOrg(uid: $uid) {
+      id
+      uid
+      name
+    }
+  }
+`;
 export const getOrgs = /* GraphQL */ `
   query GetOrgs($first: Int, $after: String, $last: Int, $before: String) {
     getOrgs(first: $first, after: $after, last: $last, before: $before) {
