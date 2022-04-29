@@ -1,1 +1,42 @@
-$util.toJson($ctx.result.items)
+ #set($startCursor = "")
+#set($endCursor = "")
+#set($edges = [])
+
+#foreach($item in $ctx.result.items)
+
+  #set($key = $util.toJson($util.dynamodb.toMapValues({"pk": $item.pk, "sk": $item.sk, "GSI1pk": $item.GSI1pk, "GSI1sk": $item.GSI1sk})))
+  #set($cursor = $util.base64Encode($key))
+
+  #if($utils.isNullOrBlank($startCursor))
+    #set($startCursor = $cursor)
+  #end
+
+  #if(!$foreach.hasNext)
+    #set($endCursor = $cursor)
+  #end
+
+  #set($edge = {
+    "cursor": $cursor,
+    "node": $item
+  })
+
+  $util.qr($edges.add($edge))
+
+#end
+
+#set($hasNextPage = true)
+
+#if($utils.isNullOrBlank($ctx.result.nextToken))
+  #set($hasNextPage = false)
+#end
+
+$util.toJson({
+  "edges": $edges,
+  "ctx": $util.toJson($ctx),
+  "pageInfo": {
+    "hasNextPage": $hasNextPage,
+    "hasPreviousPage": true,
+    "startCursor": $startCursor,
+    "endCursor": $endCursor
+  }
+})

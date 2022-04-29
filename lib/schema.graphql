@@ -27,13 +27,14 @@ type UserEdge {
 }
 
 type OrgConnection {
-  edges: [UserEdge]
+  edges: [OrgEdge]
   pageInfo: PageInfo!
+  ctx: String
 }
 
 type OrgEdge {
   cursor: String!
-  node: User
+  node: Org
 }
 
 type User implements Node {

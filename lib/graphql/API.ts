@@ -64,8 +64,15 @@ export type SensorConnection = {
 
 export type OrgConnection = {
   __typename: "OrgConnection",
-  edges?:  Array<UserEdge | null > | null,
+  edges?:  Array<OrgEdge | null > | null,
   pageInfo: PageInfo,
+  ctx?: string | null,
+};
+
+export type OrgEdge = {
+  __typename: "OrgEdge",
+  cursor: string,
+  node?: Org | null,
 };
 
 export type CreateOrgMutationVariables = {
@@ -198,7 +205,7 @@ export type GetOrgsQuery = {
   getOrgs?:  {
     __typename: "OrgConnection",
     edges?:  Array< {
-      __typename: "UserEdge",
+      __typename: "OrgEdge",
       cursor: string,
     } | null > | null,
     pageInfo:  {
@@ -208,6 +215,7 @@ export type GetOrgsQuery = {
       startCursor?: string | null,
       endCursor?: string | null,
     },
+    ctx?: string | null,
   } | null,
 };
 
