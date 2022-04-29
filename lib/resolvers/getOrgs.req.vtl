@@ -3,6 +3,7 @@
     "version": "2017-02-28",
     "operation": "Query",
     "index" : "GSI1",
+    "nextToken": #if($ctx.args.after) "$ctx.args.after" #else null #end,
     "query" : {
         "expression" : "#GSI1pk = :GSI1pk",
         "expressionNames" : {

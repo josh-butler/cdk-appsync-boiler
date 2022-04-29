@@ -69,7 +69,7 @@ query GetOrgs($first: Int, $after: String, $last: Int, $before: String) {
   getOrgs(first: $first, after: $after, last: $last, before: $before) {
     edges {
       cursor
-      node { name, id }
+      node { name }
     }
     pageInfo {
       hasNextPage
