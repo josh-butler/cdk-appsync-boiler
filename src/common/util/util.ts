@@ -12,6 +12,9 @@ const ddbMarshal = (data: Object) => DynamoDB.Converter.marshall(data);
 
 const ddbUnmarshal = (data: any) => DynamoDB.Converter.unmarshall(data);
 
+const ddbBase64 = (data: Object) =>
+  Buffer.from(JSON.stringify(ddbMarshal(data))).toString('base64');
+
 const parseJson = (str: string) => {
   let data = {};
   try {
@@ -23,4 +26,4 @@ const parseJson = (str: string) => {
   return data;
 };
 
-export {parseJson, uuid, base64, unBase64, ddbMarshal, ddbUnmarshal};
+export {parseJson, uuid, base64, unBase64, ddbMarshal, ddbUnmarshal, ddbBase64};
