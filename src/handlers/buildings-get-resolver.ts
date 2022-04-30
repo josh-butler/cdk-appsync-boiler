@@ -1,7 +1,6 @@
 import {AppSyncResolverHandler} from 'aws-lambda';
 
 import {
-  ddbMarshal,
   ddbUnmarshal,
   ddbBase64,
   unBase64,
@@ -71,7 +70,7 @@ class Buildings {
     // TODO use config value for default limit
     const [limit = 10, cursor = '', reverse = false] = ddbPagination(queryArgs);
 
-    const GSI1pk = 'ORG';
+    const GSI1pk = 'BUILDING';
     const index = 'GSI1';
     const startKey = decodeCursor(cursor);
 
