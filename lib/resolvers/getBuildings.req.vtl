@@ -1,0 +1,16 @@
+#set($limit = $util.defaultIfNull($ctx.args.limit, 10))
+{
+    "version": "2017-02-28",
+    "operation": "Query",
+    "index" : "GSI1",
+    "query" : {
+        "expression" : "#GSI1pk = :GSI1pk",
+        "expressionNames" : {
+            "#GSI1pk" : "GSI1pk"
+        },
+        "expressionValues" : {
+            ":GSI1pk" : { "S": "BUILDING" },
+        }
+    },
+    "limit" : $limit
+}

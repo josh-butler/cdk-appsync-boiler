@@ -28,6 +28,42 @@ query Node($id: ID!) {
   "id": "eyJwayI6eyJTIjoiT1JHIzdhY2FmMmU4LTY4ZDgtNGM4Yi1iYTM0LTlhOWM1NTZiODk1YSJ9LCJzayI6eyJTIjoiT1JHIzdhY2FmMmU4LTY4ZDgtNGM4Yi1iYTM0LTlhOWM1NTZiODk1YSJ9fQ=="
 }
 
+### PUT Building
+
+POST {{apiUrl}}
+Content-Type: application/json
+Authorization: {{token}}
+X-REQUEST-TYPE: GraphQL
+
+mutation PutBuilding($name: String!) {
+  putBuilding(name: $name) {
+    id
+    name
+  }
+}
+
+{
+"name": "bldg-4"
+}
+
+### GET Buildings
+
+POST {{apiUrl}}
+Content-Type: application/json
+Authorization: {{token}}
+X-REQUEST-TYPE: GraphQL
+
+query GetBuildings($limit: Int) {
+  getBuildings(limit: $limit) {
+    id
+    name
+  }
+}
+
+{
+  "limit": 10
+}
+
 ### GET Org (uid)
 
 POST {{apiUrl}}

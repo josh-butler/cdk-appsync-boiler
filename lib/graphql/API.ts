@@ -23,6 +23,12 @@ export type User = {
   name: string,
 };
 
+export type Building = {
+  __typename: "Building",
+  id: string,
+  name: string,
+};
+
 export type UserConnection = {
   __typename: "UserConnection",
   edges?:  Array<UserEdge | null > | null,
@@ -129,6 +135,18 @@ export type CreateSensorMutation = {
   } | null,
 };
 
+export type PutBuildingMutationVariables = {
+  name: string,
+};
+
+export type PutBuildingMutation = {
+  putBuilding?:  {
+    __typename: "Building",
+    id: string,
+    name: string,
+  } | null,
+};
+
 export type GetDeviceQueryVariables = {
   id: string,
   limit?: number | null,
@@ -181,19 +199,6 @@ export type GetDeviceSensorsQuery = {
   } | null,
 };
 
-export type OrgQueryVariables = {
-  id: string,
-};
-
-export type OrgQuery = {
-  org?:  {
-    __typename: "Org",
-    id: string,
-    uid: string,
-    name: string,
-  } | null,
-};
-
 export type GetOrgQueryVariables = {
   uid: string,
 };
@@ -232,6 +237,31 @@ export type GetOrgsQuery = {
   } | null,
 };
 
+export type GetBuildingsQueryVariables = {
+  limit?: number | null,
+};
+
+export type GetBuildingsQuery = {
+  getBuildings?:  Array< {
+    __typename: "Building",
+    id: string,
+    name: string,
+  } | null > | null,
+};
+
+export type OrgQueryVariables = {
+  id: string,
+};
+
+export type OrgQuery = {
+  org?:  {
+    __typename: "Org",
+    id: string,
+    uid: string,
+    name: string,
+  } | null,
+};
+
 export type NodeQueryVariables = {
   id: string,
 };
@@ -247,6 +277,10 @@ export type NodeQuery = {
       id: string,
       uid: string,
       pid: string,
+      name: string,
+    } | {
+      __typename: "Building",
+      id: string,
       name: string,
     }
   ) | null,

@@ -42,15 +42,6 @@ export const getDeviceSensors = /* GraphQL */ `
     }
   }
 `;
-export const org = /* GraphQL */ `
-  query Org($id: ID!) {
-    org(id: $id) {
-      id
-      uid
-      name
-    }
-  }
-`;
 export const getOrg = /* GraphQL */ `
   query GetOrg($uid: ID!) {
     getOrg(uid: $uid) {
@@ -76,6 +67,23 @@ export const getOrgs = /* GraphQL */ `
     }
   }
 `;
+export const getBuildings = /* GraphQL */ `
+  query GetBuildings($limit: Int) {
+    getBuildings(limit: $limit) {
+      id
+      name
+    }
+  }
+`;
+export const org = /* GraphQL */ `
+  query Org($id: ID!) {
+    org(id: $id) {
+      id
+      uid
+      name
+    }
+  }
+`;
 export const node = /* GraphQL */ `
   query Node($id: ID!) {
     node(id: $id) {
@@ -87,6 +95,9 @@ export const node = /* GraphQL */ `
       ... on User {
         uid
         pid
+        name
+      }
+      ... on Building {
         name
       }
     }

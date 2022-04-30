@@ -480,6 +480,29 @@ export class CdkAppSyncBoilerStack extends Stack {
       ),
     });
 
+    // BUILDINGS VTL
+    deviceDS.createResolver({
+      typeName: 'Mutation',
+      fieldName: 'putBuilding',
+      requestMappingTemplate: appsync.MappingTemplate.fromFile(
+        './lib/resolvers/putBuilding.req.vtl'
+      ),
+      responseMappingTemplate: appsync.MappingTemplate.fromFile(
+        './lib/resolvers/putBuilding.res.vtl'
+      ),
+    });
+
+    deviceDS.createResolver({
+      typeName: 'Query',
+      fieldName: 'getBuildings',
+      requestMappingTemplate: appsync.MappingTemplate.fromFile(
+        './lib/resolvers/getBuildings.req.vtl'
+      ),
+      responseMappingTemplate: appsync.MappingTemplate.fromFile(
+        './lib/resolvers/getBuildings.res.vtl'
+      ),
+    });
+
     // ==== Outputs ====
     new CfnOutput(this, 'GqlAuthorizerLambdaArn', {
       description: 'GqlAuthorizer Function ARN',

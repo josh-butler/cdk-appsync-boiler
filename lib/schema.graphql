@@ -65,11 +65,17 @@ type SensorConnection {
   nextToken: String
 }
 
+type Building implements Node {
+  id: ID!
+  name: String!
+}
+
 type Mutation {
   createOrg(name: String!): Org
   createUser(orgId: ID!, name: String!): User
   createDevice(name: String!): Device
   createSensor(deviceId: ID!, name: String!): Sensor
+  putBuilding(name: String!): Building
 }
 
 type Query {
@@ -77,9 +83,10 @@ type Query {
   getDeviceFn(id: ID!): Device
   listDevices: [Device]
   getDeviceSensors(deviceId: ID!, limit: Int, nextToken: String): SensorConnection
-  org(id: ID!): Org
   getOrg(uid: ID!): Org
   getOrgs(first: Int, after: String, last: Int, before: String): OrgConnection
+  getBuildings(limit: Int): [Building]
+  org(id: ID!): Org
   node(id: ID!): Node
 }
 
