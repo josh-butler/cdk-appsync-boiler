@@ -108,6 +108,9 @@ export const node = /* GraphQL */ `
       ... on Building {
         name
       }
+      ... on Room {
+        name
+      }
     }
   }
 `;

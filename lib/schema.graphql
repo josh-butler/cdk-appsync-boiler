@@ -81,12 +81,29 @@ type BuildingEdge {
   node: Building
 }
 
+type Room implements Node {
+  id: ID!
+  name: String!
+}
+
+type RoomConnection {
+  edges: [BuildingEdge]
+  pageInfo: PageInfo!
+  ctx: String
+}
+
+type RoomEdge {
+  cursor: String!
+  node: Building
+}
+
 type Mutation {
   createOrg(name: String!): Org
   createUser(orgId: ID!, name: String!): User
   createDevice(name: String!): Device
   createSensor(deviceId: ID!, name: String!): Sensor
   putBuilding(name: String!): Building
+  putRoom(buildingId: ID!, name: String!): Room
 }
 
 type Query {

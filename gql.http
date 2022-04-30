@@ -46,6 +46,25 @@ mutation PutBuilding($name: String!) {
 "name": "bldg-4"
 }
 
+### PUT Room
+
+POST {{apiUrl}}
+Content-Type: application/json
+Authorization: {{token}}
+X-REQUEST-TYPE: GraphQL
+
+mutation PutRoom($buildingId: ID!, $name: String!) {
+  putRoom(buildingId: $buildingId, name: $name) {
+    id
+    name
+  }
+}
+
+{
+"buildingId": "01G1W119NCN19Y2V3Q4KCCYBZM",
+"name": "room-2-2"
+}
+
 ### GET Buildings
 
 POST {{apiUrl}}

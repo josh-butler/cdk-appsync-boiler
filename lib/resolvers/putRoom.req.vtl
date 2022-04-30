@@ -1,0 +1,26 @@
+#set($id = $util.autoUlid())
+#set($date = $util.time.nowISO8601())
+{
+  "version": "2017-02-28",
+  "operation": "PutItem",
+  "key": {
+    "pk": $util.dynamodb.toDynamoDBJson("BUILDING#${ctx.args.buildingId}"),
+    "sk": $util.dynamodb.toDynamoDBJson("ROOM#${id}"),
+  },
+  "attributeValues": $util.dynamodb.toMapValuesJson({
+    "id": $id,
+    "pid": $ctx.args.deviceId,
+    "GSI1pk": "ROOM",
+    "GSI1sk": "ROOM#${id}",
+    "name": $ctx.args.name,
+    "_ct": $date,
+    "_md": $date
+  }),
+  "condition": {
+    "expression": "attribute_not_exists(#pk) and attribute_not_exists(#sk)",
+    "expressionNames": {
+      "#pk": "pk",
+      "#sk": "sk",
+    },
+  },
+}

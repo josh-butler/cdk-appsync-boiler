@@ -524,6 +524,17 @@ export class CdkAppSyncBoilerStack extends Stack {
       ),
     });
 
+    deviceDS.createResolver({
+      typeName: 'Mutation',
+      fieldName: 'putRoom',
+      requestMappingTemplate: appsync.MappingTemplate.fromFile(
+        './lib/resolvers/putRoom.req.vtl'
+      ),
+      responseMappingTemplate: appsync.MappingTemplate.fromFile(
+        './lib/resolvers/putRoom.res.vtl'
+      ),
+    });
+
     // Replaced by pagination Lambda
     // deviceDS.createResolver({
     //   typeName: 'Query',

@@ -29,6 +29,12 @@ export type Building = {
   name: string,
 };
 
+export type Room = {
+  __typename: "Room",
+  id: string,
+  name: string,
+};
+
 export type UserConnection = {
   __typename: "UserConnection",
   edges?:  Array<UserEdge | null > | null,
@@ -155,6 +161,19 @@ export type PutBuildingMutationVariables = {
 export type PutBuildingMutation = {
   putBuilding?:  {
     __typename: "Building",
+    id: string,
+    name: string,
+  } | null,
+};
+
+export type PutRoomMutationVariables = {
+  buildingId: string,
+  name: string,
+};
+
+export type PutRoomMutation = {
+  putRoom?:  {
+    __typename: "Room",
     id: string,
     name: string,
   } | null,
@@ -306,6 +325,10 @@ export type NodeQuery = {
       name: string,
     } | {
       __typename: "Building",
+      id: string,
+      name: string,
+    } | {
+      __typename: "Room",
       id: string,
       name: string,
     }

@@ -46,3 +46,11 @@ export const putBuilding = /* GraphQL */ `
     }
   }
 `;
+export const putRoom = /* GraphQL */ `
+  mutation PutRoom($buildingId: ID!, $name: String!) {
+    putRoom(buildingId: $buildingId, name: $name) {
+      id
+      name
+    }
+  }
+`;
