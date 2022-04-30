@@ -222,6 +222,27 @@ export class CdkAppSyncBoilerStack extends Stack {
     });
     entityTable.grantReadData(orgsGetResolver);
 
+    // BUILDINGS
+    const buildingsGetResolver = new NodejsFunction(
+      this,
+      'BuildingsGetResolver',
+      {
+        memorySize: 128,
+        timeout: Duration.seconds(30),
+        runtime: Runtime.NODEJS_14_X,
+        handler: 'handler',
+        entry: './src/handlers/buildings-get-resolver.ts',
+        environment: {
+          ENTITY_TABLE: entityTable.tableName,
+        },
+        bundling: {
+          minify: true,
+          externalModules: ['aws-sdk'],
+        },
+      }
+    );
+    entityTable.grantReadData(buildingsGetResolver);
+
     /**
      * Util function that generates a JWT using a private key stored
      * in secrets manaager.
@@ -281,6 +302,11 @@ export class CdkAppSyncBoilerStack extends Stack {
       orgsGetResolver
     );
 
+    const buildingsLambdaDS = api.addLambdaDataSource(
+      'BuildingsGetResolver',
+      buildingsGetResolver
+    );
+
     // // replaced w/ VTL - 1
     // const nodeLambdaDS = api.addLambdaDataSource(
     //   'NodeLambdaDS',
@@ -307,6 +333,12 @@ export class CdkAppSyncBoilerStack extends Stack {
     orgsLambdaDS.createResolver({
       typeName: 'Query',
       fieldName: 'getOrgs',
+    });
+
+    // BUILDINGS
+    buildingsLambdaDS.createResolver({
+      typeName: 'Query',
+      fieldName: 'getBuildings',
     });
 
     // replaced w/ VTL - 1
@@ -492,16 +524,17 @@ export class CdkAppSyncBoilerStack extends Stack {
       ),
     });
 
-    deviceDS.createResolver({
-      typeName: 'Query',
-      fieldName: 'getBuildings',
-      requestMappingTemplate: appsync.MappingTemplate.fromFile(
-        './lib/resolvers/getBuildings.req.vtl'
-      ),
-      responseMappingTemplate: appsync.MappingTemplate.fromFile(
-        './lib/resolvers/getBuildings.res.vtl'
-      ),
-    });
+    // Replaced by pagination Lambda
+    // deviceDS.createResolver({
+    //   typeName: 'Query',
+    //   fieldName: 'getBuildings',
+    //   requestMappingTemplate: appsync.MappingTemplate.fromFile(
+    //     './lib/resolvers/getBuildings.req.vtl'
+    //   ),
+    //   responseMappingTemplate: appsync.MappingTemplate.fromFile(
+    //     './lib/resolvers/getBuildings.res.vtl'
+    //   ),
+    // });
 
     // ==== Outputs ====
     new CfnOutput(this, 'GqlAuthorizerLambdaArn', {

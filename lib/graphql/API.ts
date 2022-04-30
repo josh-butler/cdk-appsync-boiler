@@ -81,6 +81,19 @@ export type OrgEdge = {
   node?: Org | null,
 };
 
+export type BuildingConnection = {
+  __typename: "BuildingConnection",
+  edges?:  Array<BuildingEdge | null > | null,
+  pageInfo: PageInfo,
+  ctx?: string | null,
+};
+
+export type BuildingEdge = {
+  __typename: "BuildingEdge",
+  cursor: string,
+  node?: Building | null,
+};
+
 export type CreateOrgMutationVariables = {
   name: string,
 };
@@ -238,15 +251,28 @@ export type GetOrgsQuery = {
 };
 
 export type GetBuildingsQueryVariables = {
-  limit?: number | null,
+  first?: number | null,
+  after?: string | null,
+  last?: number | null,
+  before?: string | null,
 };
 
 export type GetBuildingsQuery = {
-  getBuildings?:  Array< {
-    __typename: "Building",
-    id: string,
-    name: string,
-  } | null > | null,
+  getBuildings?:  {
+    __typename: "BuildingConnection",
+    edges?:  Array< {
+      __typename: "BuildingEdge",
+      cursor: string,
+    } | null > | null,
+    pageInfo:  {
+      __typename: "PageInfo",
+      hasNextPage: boolean,
+      hasPreviousPage: boolean,
+      startCursor?: string | null,
+      endCursor?: string | null,
+    },
+    ctx?: string | null,
+  } | null,
 };
 
 export type OrgQueryVariables = {

@@ -68,10 +68,18 @@ export const getOrgs = /* GraphQL */ `
   }
 `;
 export const getBuildings = /* GraphQL */ `
-  query GetBuildings($limit: Int) {
-    getBuildings(limit: $limit) {
-      id
-      name
+  query GetBuildings($first: Int, $after: String, $last: Int, $before: String) {
+    getBuildings(first: $first, after: $after, last: $last, before: $before) {
+      edges {
+        cursor
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      ctx
     }
   }
 `;

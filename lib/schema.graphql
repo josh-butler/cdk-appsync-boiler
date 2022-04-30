@@ -70,6 +70,17 @@ type Building implements Node {
   name: String!
 }
 
+type BuildingConnection {
+  edges: [BuildingEdge]
+  pageInfo: PageInfo!
+  ctx: String
+}
+
+type BuildingEdge {
+  cursor: String!
+  node: Building
+}
+
 type Mutation {
   createOrg(name: String!): Org
   createUser(orgId: ID!, name: String!): User
@@ -85,7 +96,7 @@ type Query {
   getDeviceSensors(deviceId: ID!, limit: Int, nextToken: String): SensorConnection
   getOrg(uid: ID!): Org
   getOrgs(first: Int, after: String, last: Int, before: String): OrgConnection
-  getBuildings(limit: Int): [Building]
+  getBuildings(first: Int, after: String, last: Int, before: String): BuildingConnection
   org(id: ID!): Org
   node(id: ID!): Node
 }
