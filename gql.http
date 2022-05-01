@@ -107,7 +107,23 @@ query GetBuildings($first: Int, $after: String, $last: Int, $before: String) {
   getBuildings(first: $first, after: $after, last: $last, before: $before) {
     edges {
       cursor
-      node { id, name }
+      node { 
+        id, 
+        name,
+        rooms(first: 3) {
+          edges {
+            cursor
+            node { id, name }
+          }
+          pageInfo {
+            hasNextPage
+            hasPreviousPage
+            startCursor
+            endCursor
+          }
+          ctx
+        }
+      }
     }
     pageInfo {
       hasNextPage

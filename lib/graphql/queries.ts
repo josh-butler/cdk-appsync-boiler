@@ -94,9 +94,9 @@ export const getBuildings = /* GraphQL */ `
     }
   }
 `;
-export const getRooms = /* GraphQL */ `
-  query GetRooms($first: Int, $after: String, $last: Int, $before: String) {
-    getRooms(first: $first, after: $after, last: $last, before: $before) {
+export const rooms = /* GraphQL */ `
+  query Rooms($first: Int, $after: String, $last: Int, $before: String) {
+    rooms(first: $first, after: $after, last: $last, before: $before) {
       edges {
         cursor
       }
@@ -115,14 +115,6 @@ export const org = /* GraphQL */ `
     org(id: $id) {
       id
       uid
-      name
-    }
-  }
-`;
-export const room = /* GraphQL */ `
-  query Room($id: ID!) {
-    room(id: $id) {
-      id
       name
     }
   }

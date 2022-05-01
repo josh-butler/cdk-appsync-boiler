@@ -363,8 +363,8 @@ export class CdkAppSyncBoilerStack extends Stack {
     });
 
     roomsLambdaDS.createResolver({
-      typeName: 'Query',
-      fieldName: 'getRooms',
+      typeName: 'Building',
+      fieldName: 'rooms',
     });
 
     // replaced w/ VTL - 1
@@ -414,16 +414,17 @@ export class CdkAppSyncBoilerStack extends Stack {
       ),
     });
 
-    deviceDS.createResolver({
-      typeName: 'RoomEdge',
-      fieldName: 'node',
-      requestMappingTemplate: appsync.MappingTemplate.fromFile(
-        './lib/resolvers/getRoomNode.req.vtl'
-      ),
-      responseMappingTemplate: appsync.MappingTemplate.fromFile(
-        './lib/resolvers/getRoomNode.res.vtl'
-      ),
-    });
+    // NOT needed for Building.rooms?
+    // deviceDS.createResolver({
+    //   typeName: 'RoomEdge',
+    //   fieldName: 'node',
+    //   requestMappingTemplate: appsync.MappingTemplate.fromFile(
+    //     './lib/resolvers/getRoomNode.req.vtl'
+    //   ),
+    //   responseMappingTemplate: appsync.MappingTemplate.fromFile(
+    //     './lib/resolvers/getRoomNode.res.vtl'
+    //   ),
+    // });
 
     // TODO can be removed?
     deviceDS.createResolver({

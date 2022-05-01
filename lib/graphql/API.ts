@@ -328,15 +328,15 @@ export type GetBuildingsQuery = {
   } | null,
 };
 
-export type GetRoomsQueryVariables = {
+export type RoomsQueryVariables = {
   first?: number | null,
   after?: string | null,
   last?: number | null,
   before?: string | null,
 };
 
-export type GetRoomsQuery = {
-  getRooms?:  {
+export type RoomsQuery = {
+  rooms?:  {
     __typename: "RoomConnection",
     edges?:  Array< {
       __typename: "RoomEdge",
@@ -362,18 +362,6 @@ export type OrgQuery = {
     __typename: "Org",
     id: string,
     uid: string,
-    name: string,
-  } | null,
-};
-
-export type RoomQueryVariables = {
-  id: string,
-};
-
-export type RoomQuery = {
-  room?:  {
-    __typename: "Room",
-    id: string,
     name: string,
   } | null,
 };
