@@ -38,6 +38,22 @@ export const createSensor = /* GraphQL */ `
     }
   }
 `;
+export const putFob = /* GraphQL */ `
+  mutation PutFob($name: String!) {
+    putFob(name: $name) {
+      id
+      name
+    }
+  }
+`;
+export const putTenant = /* GraphQL */ `
+  mutation PutTenant($fobId: ID!, $name: String!) {
+    putTenant(fobId: $fobId, name: $name) {
+      id
+      name
+    }
+  }
+`;
 export const putBuilding = /* GraphQL */ `
   mutation PutBuilding($name: String!) {
     putBuilding(name: $name) {

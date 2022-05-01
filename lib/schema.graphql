@@ -98,11 +98,23 @@ type RoomEdge {
   node: Room
 }
 
+type Fob {
+  id: ID!
+  name: String
+}
+
+type Tenant {
+  id: ID!
+  name: String
+}
+
 type Mutation {
   createOrg(name: String!): Org
   createUser(orgId: ID!, name: String!): User
   createDevice(name: String!): Device
   createSensor(deviceId: ID!, name: String!): Sensor
+  putFob(name: String!): Fob
+  putTenant(fobId: ID!, name: String!): Room
   putBuilding(name: String!): Building
   putRoom(buildingId: ID!, name: String!): Room
 }

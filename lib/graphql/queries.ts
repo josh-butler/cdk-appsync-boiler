@@ -110,6 +110,14 @@ export const rooms = /* GraphQL */ `
     }
   }
 `;
+export const fob = /* GraphQL */ `
+  query Fob($id: ID!) {
+    fob(id: $id) {
+      id
+      name
+    }
+  }
+`;
 export const org = /* GraphQL */ `
   query Org($id: ID!) {
     org(id: $id) {

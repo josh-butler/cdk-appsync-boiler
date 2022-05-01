@@ -28,6 +28,43 @@ query Node($id: ID!) {
   "id": "eyJwayI6eyJTIjoiT1JHIzdhY2FmMmU4LTY4ZDgtNGM4Yi1iYTM0LTlhOWM1NTZiODk1YSJ9LCJzayI6eyJTIjoiT1JHIzdhY2FmMmU4LTY4ZDgtNGM4Yi1iYTM0LTlhOWM1NTZiODk1YSJ9fQ=="
 }
 
+### PUT FOB
+
+POST {{apiUrl}}
+Content-Type: application/json
+Authorization: {{token}}
+X-REQUEST-TYPE: GraphQL
+
+mutation PutFob($name: String!) {
+  putFob(name: $name) {
+    id
+    name
+  }
+}
+
+{
+"name": "fob-1"
+}
+
+### PUT TENANT
+
+POST {{apiUrl}}
+Content-Type: application/json
+Authorization: {{token}}
+X-REQUEST-TYPE: GraphQL
+
+mutation PutTenant($fobId: ID!, $name: String!) {
+  putTenant(fobId: $fobId, name: $name) {
+    id
+    name
+  }
+}
+
+{
+  "name": "tenant-1",
+  "fobId": "3d3b1751-fa5a-4048-9234-6cdbbfaf162c"
+}
+
 ### PUT Building
 
 POST {{apiUrl}}

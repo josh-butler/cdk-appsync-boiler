@@ -82,6 +82,12 @@ export type Sensor = {
   name: string,
 };
 
+export type Fob = {
+  __typename: "Fob",
+  id: string,
+  name?: string | null,
+};
+
 export type SensorConnection = {
   __typename: "SensorConnection",
   items?:  Array<Sensor > | null,
@@ -164,6 +170,31 @@ export type CreateSensorMutation = {
     __typename: "Sensor",
     id: string,
     pid: string,
+    name: string,
+  } | null,
+};
+
+export type PutFobMutationVariables = {
+  name: string,
+};
+
+export type PutFobMutation = {
+  putFob?:  {
+    __typename: "Fob",
+    id: string,
+    name?: string | null,
+  } | null,
+};
+
+export type PutTenantMutationVariables = {
+  fobId: string,
+  name: string,
+};
+
+export type PutTenantMutation = {
+  putTenant?:  {
+    __typename: "Room",
+    id: string,
     name: string,
   } | null,
 };
@@ -350,6 +381,18 @@ export type RoomsQuery = {
       endCursor?: string | null,
     },
     ctx?: string | null,
+  } | null,
+};
+
+export type FobQueryVariables = {
+  id: string,
+};
+
+export type FobQuery = {
+  fob?:  {
+    __typename: "Fob",
+    id: string,
+    name?: string | null,
   } | null,
 };
 

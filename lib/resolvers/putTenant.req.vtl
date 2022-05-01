@@ -1,0 +1,27 @@
+#set($id = $util.autoId())
+#set($date = $util.time.nowISO8601())
+
+#set($pk = "TENANT#${id}")
+
+#set($key = $util.toJson($util.dynamodb.toMapValues({"pk": $pk, "sk": $pk})))
+
+{
+  "version": "2017-02-28",
+  "operation": "PutItem",
+  "key": $key,
+  "attributeValues": $util.dynamodb.toMapValuesJson({
+    "id": $id,
+    "GSI1pk": "FOB",
+    "GSI1sk": "FOB#${ctx.args.fobId}",
+    "name": $ctx.args.name,
+    "_ct": $date,
+    "_md": $date
+  }),
+  "condition": {
+    "expression": "attribute_not_exists(#pk) and attribute_not_exists(#sk)",
+    "expressionNames": {
+      "#pk": "pk",
+      "#sk": "sk",
+    },
+  },
+}
