@@ -366,6 +366,18 @@ export type OrgQuery = {
   } | null,
 };
 
+export type RoomQueryVariables = {
+  id: string,
+};
+
+export type RoomQuery = {
+  room?:  {
+    __typename: "Room",
+    id: string,
+    name: string,
+  } | null,
+};
+
 export type NodeQueryVariables = {
   id: string,
 };

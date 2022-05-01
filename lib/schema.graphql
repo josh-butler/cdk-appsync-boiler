@@ -118,6 +118,7 @@ type Query {
   getBuildings(first: Int, after: String, last: Int, before: String): BuildingConnection
   getRooms(first: Int, after: String, last: Int, before: String): RoomConnection
   org(id: ID!): Org
+  room(id: ID!): Room
   node(id: ID!): Node
 }
 

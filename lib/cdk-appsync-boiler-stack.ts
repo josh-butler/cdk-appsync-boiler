@@ -414,6 +414,17 @@ export class CdkAppSyncBoilerStack extends Stack {
       ),
     });
 
+    deviceDS.createResolver({
+      typeName: 'RoomEdge',
+      fieldName: 'node',
+      requestMappingTemplate: appsync.MappingTemplate.fromFile(
+        './lib/resolvers/getRoomNode.req.vtl'
+      ),
+      responseMappingTemplate: appsync.MappingTemplate.fromFile(
+        './lib/resolvers/getRoomNode.res.vtl'
+      ),
+    });
+
     // TODO can be removed?
     deviceDS.createResolver({
       typeName: 'Query',
