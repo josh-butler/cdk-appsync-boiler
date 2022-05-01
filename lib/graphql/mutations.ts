@@ -43,6 +43,9 @@ export const putBuilding = /* GraphQL */ `
     putBuilding(name: $name) {
       id
       name
+      rooms {
+        ctx
+      }
     }
   }
 `;

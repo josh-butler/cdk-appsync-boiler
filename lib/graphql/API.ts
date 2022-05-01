@@ -27,12 +27,34 @@ export type Building = {
   __typename: "Building",
   id: string,
   name: string,
+  rooms?: RoomConnection | null,
+};
+
+export type RoomConnection = {
+  __typename: "RoomConnection",
+  edges?:  Array<RoomEdge | null > | null,
+  pageInfo: PageInfo,
+  ctx?: string | null,
+};
+
+export type RoomEdge = {
+  __typename: "RoomEdge",
+  cursor: string,
+  node?: Room | null,
 };
 
 export type Room = {
   __typename: "Room",
   id: string,
   name: string,
+};
+
+export type PageInfo = {
+  __typename: "PageInfo",
+  hasNextPage: boolean,
+  hasPreviousPage: boolean,
+  startCursor?: string | null,
+  endCursor?: string | null,
 };
 
 export type UserConnection = {
@@ -45,14 +67,6 @@ export type UserEdge = {
   __typename: "UserEdge",
   cursor: string,
   node?: User | null,
-};
-
-export type PageInfo = {
-  __typename: "PageInfo",
-  hasNextPage: boolean,
-  hasPreviousPage: boolean,
-  startCursor?: string | null,
-  endCursor?: string | null,
 };
 
 export type Device = {
@@ -163,6 +177,10 @@ export type PutBuildingMutation = {
     __typename: "Building",
     id: string,
     name: string,
+    rooms?:  {
+      __typename: "RoomConnection",
+      ctx?: string | null,
+    } | null,
   } | null,
 };
 
@@ -269,6 +287,22 @@ export type GetOrgsQuery = {
   } | null,
 };
 
+export type GetBuildingQueryVariables = {
+  id: string,
+};
+
+export type GetBuildingQuery = {
+  getBuilding?:  {
+    __typename: "Building",
+    id: string,
+    name: string,
+    rooms?:  {
+      __typename: "RoomConnection",
+      ctx?: string | null,
+    } | null,
+  } | null,
+};
+
 export type GetBuildingsQueryVariables = {
   first?: number | null,
   after?: string | null,
@@ -281,6 +315,31 @@ export type GetBuildingsQuery = {
     __typename: "BuildingConnection",
     edges?:  Array< {
       __typename: "BuildingEdge",
+      cursor: string,
+    } | null > | null,
+    pageInfo:  {
+      __typename: "PageInfo",
+      hasNextPage: boolean,
+      hasPreviousPage: boolean,
+      startCursor?: string | null,
+      endCursor?: string | null,
+    },
+    ctx?: string | null,
+  } | null,
+};
+
+export type GetRoomsQueryVariables = {
+  first?: number | null,
+  after?: string | null,
+  last?: number | null,
+  before?: string | null,
+};
+
+export type GetRoomsQuery = {
+  getRooms?:  {
+    __typename: "RoomConnection",
+    edges?:  Array< {
+      __typename: "RoomEdge",
       cursor: string,
     } | null > | null,
     pageInfo:  {
@@ -327,6 +386,10 @@ export type NodeQuery = {
       __typename: "Building",
       id: string,
       name: string,
+      rooms?:  {
+        __typename: string,
+        ctx?: string | null,
+      } | null,
     } | {
       __typename: "Room",
       id: string,

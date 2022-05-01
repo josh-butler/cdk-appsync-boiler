@@ -243,6 +243,22 @@ export class CdkAppSyncBoilerStack extends Stack {
     );
     entityTable.grantReadData(buildingsGetResolver);
 
+    const roomsGetResolver = new NodejsFunction(this, 'RoomsGetResolver', {
+      memorySize: 128,
+      timeout: Duration.seconds(30),
+      runtime: Runtime.NODEJS_14_X,
+      handler: 'handler',
+      entry: './src/handlers/rooms-get-resolver.ts',
+      environment: {
+        ENTITY_TABLE: entityTable.tableName,
+      },
+      bundling: {
+        minify: true,
+        externalModules: ['aws-sdk'],
+      },
+    });
+    entityTable.grantReadData(roomsGetResolver);
+
     /**
      * Util function that generates a JWT using a private key stored
      * in secrets manaager.
@@ -307,6 +323,11 @@ export class CdkAppSyncBoilerStack extends Stack {
       buildingsGetResolver
     );
 
+    const roomsLambdaDS = api.addLambdaDataSource(
+      'RoomsGetResolver',
+      roomsGetResolver
+    );
+
     // // replaced w/ VTL - 1
     // const nodeLambdaDS = api.addLambdaDataSource(
     //   'NodeLambdaDS',
@@ -339,6 +360,11 @@ export class CdkAppSyncBoilerStack extends Stack {
     buildingsLambdaDS.createResolver({
       typeName: 'Query',
       fieldName: 'getBuildings',
+    });
+
+    roomsLambdaDS.createResolver({
+      typeName: 'Query',
+      fieldName: 'getRooms',
     });
 
     // replaced w/ VTL - 1
@@ -532,6 +558,17 @@ export class CdkAppSyncBoilerStack extends Stack {
       ),
       responseMappingTemplate: appsync.MappingTemplate.fromFile(
         './lib/resolvers/putRoom.res.vtl'
+      ),
+    });
+
+    deviceDS.createResolver({
+      typeName: 'Query',
+      fieldName: 'getBuilding',
+      requestMappingTemplate: appsync.MappingTemplate.fromFile(
+        './lib/resolvers/getBuilding.req.vtl'
+      ),
+      responseMappingTemplate: appsync.MappingTemplate.fromFile(
+        './lib/resolvers/getBuilding.res.vtl'
       ),
     });
 

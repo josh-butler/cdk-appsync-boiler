@@ -65,6 +65,37 @@ mutation PutRoom($buildingId: ID!, $name: String!) {
 "name": "room-2-2"
 }
 
+### GET Building
+
+POST {{apiUrl}}
+Content-Type: application/json
+Authorization: {{token}}
+X-REQUEST-TYPE: GraphQL
+
+query GetBuilding($id: ID!) {
+  getBuilding(id: $id) {
+    id
+    name
+    rooms(first: 3) {
+      edges {
+        cursor
+        node { id, name }
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      ctx
+    }
+  }
+}
+
+{
+  "id": "01G1W119NCN19Y2V3Q4KCCYBZM"
+}
+
 ### GET Buildings
 
 POST {{apiUrl}}
@@ -245,9 +276,7 @@ mutation ($deviceId: ID!, $name: String!) {
 POST {{apiUrl}}
 Content-Type: application/json
 Authorization: {{token}}
-X-REQUEST-TYPE: GraphQL
-
-query ($deviceId: ID!, $limit: Int, $nextToken: String) {
+X-REQUEST-TYPE: GraphQL(first: Int, after: String, last: Int, before: String)
   getDeviceSensors(
     deviceId: $deviceId
     limit: $limit

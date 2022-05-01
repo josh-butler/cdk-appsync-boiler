@@ -67,9 +67,36 @@ export const getOrgs = /* GraphQL */ `
     }
   }
 `;
+export const getBuilding = /* GraphQL */ `
+  query GetBuilding($id: ID!) {
+    getBuilding(id: $id) {
+      id
+      name
+      rooms {
+        ctx
+      }
+    }
+  }
+`;
 export const getBuildings = /* GraphQL */ `
   query GetBuildings($first: Int, $after: String, $last: Int, $before: String) {
     getBuildings(first: $first, after: $after, last: $last, before: $before) {
+      edges {
+        cursor
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      ctx
+    }
+  }
+`;
+export const getRooms = /* GraphQL */ `
+  query GetRooms($first: Int, $after: String, $last: Int, $before: String) {
+    getRooms(first: $first, after: $after, last: $last, before: $before) {
       edges {
         cursor
       }
@@ -107,6 +134,9 @@ export const node = /* GraphQL */ `
       }
       ... on Building {
         name
+        rooms {
+          ctx
+        }
       }
       ... on Room {
         name

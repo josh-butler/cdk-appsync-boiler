@@ -9,7 +9,7 @@
   },
   "attributeValues": $util.dynamodb.toMapValuesJson({
     "id": $id,
-    "pid": $ctx.args.deviceId,
+    "pid": $ctx.args.buildingId,
     "GSI1pk": "ROOM",
     "GSI1sk": "ROOM#${id}",
     "name": $ctx.args.name,
@@ -19,7 +19,7 @@
   "condition": {
     "expression": "attribute_not_exists(#pk) and attribute_not_exists(#sk)",
     "expressionNames": {
-      "#pk": "pk",
+      "#pk": "pk",  
       "#sk": "sk",
     },
   },

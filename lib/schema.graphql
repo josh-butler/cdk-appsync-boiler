@@ -68,6 +68,7 @@ type SensorConnection {
 type Building implements Node {
   id: ID!
   name: String!
+  rooms(first: Int, after: String, last: Int, before: String): RoomConnection
 }
 
 type BuildingConnection {
@@ -87,14 +88,14 @@ type Room implements Node {
 }
 
 type RoomConnection {
-  edges: [BuildingEdge]
+  edges: [RoomEdge]
   pageInfo: PageInfo!
   ctx: String
 }
 
 type RoomEdge {
   cursor: String!
-  node: Building
+  node: Room
 }
 
 type Mutation {
@@ -113,7 +114,9 @@ type Query {
   getDeviceSensors(deviceId: ID!, limit: Int, nextToken: String): SensorConnection
   getOrg(uid: ID!): Org
   getOrgs(first: Int, after: String, last: Int, before: String): OrgConnection
+  getBuilding(id: ID!): Building
   getBuildings(first: Int, after: String, last: Int, before: String): BuildingConnection
+  getRooms(first: Int, after: String, last: Int, before: String): RoomConnection
   org(id: ID!): Org
   node(id: ID!): Node
 }
