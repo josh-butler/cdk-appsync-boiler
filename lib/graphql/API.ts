@@ -94,6 +94,13 @@ export type SensorConnection = {
   nextToken?: string | null,
 };
 
+export type Tenant = {
+  __typename: "Tenant",
+  id: string,
+  name?: string | null,
+  fob?: Fob | null,
+};
+
 export type OrgConnection = {
   __typename: "OrgConnection",
   edges?:  Array<OrgEdge | null > | null,
@@ -293,6 +300,23 @@ export type GetOrgQuery = {
   } | null,
 };
 
+export type GetTenantQueryVariables = {
+  id: string,
+};
+
+export type GetTenantQuery = {
+  getTenant?:  {
+    __typename: "Tenant",
+    id: string,
+    name?: string | null,
+    fob?:  {
+      __typename: "Fob",
+      id: string,
+      name?: string | null,
+    } | null,
+  } | null,
+};
+
 export type GetOrgsQueryVariables = {
   first?: number | null,
   after?: string | null,
@@ -384,18 +408,6 @@ export type RoomsQuery = {
   } | null,
 };
 
-export type FobQueryVariables = {
-  id: string,
-};
-
-export type FobQuery = {
-  fob?:  {
-    __typename: "Fob",
-    id: string,
-    name?: string | null,
-  } | null,
-};
-
 export type OrgQueryVariables = {
   id: string,
 };
@@ -406,6 +418,18 @@ export type OrgQuery = {
     id: string,
     uid: string,
     name: string,
+  } | null,
+};
+
+export type FobQueryVariables = {
+  id?: string | null,
+};
+
+export type FobQuery = {
+  fob?:  {
+    __typename: "Fob",
+    id: string,
+    name?: string | null,
   } | null,
 };
 

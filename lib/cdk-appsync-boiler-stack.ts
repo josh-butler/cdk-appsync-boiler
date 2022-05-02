@@ -606,6 +606,28 @@ export class CdkAppSyncBoilerStack extends Stack {
       ),
     });
 
+    deviceDS.createResolver({
+      typeName: 'Query',
+      fieldName: 'getTenant',
+      requestMappingTemplate: appsync.MappingTemplate.fromFile(
+        './lib/resolvers/getTenant.req.vtl'
+      ),
+      responseMappingTemplate: appsync.MappingTemplate.fromFile(
+        './lib/resolvers/getTenant.res.vtl'
+      ),
+    });
+
+    deviceDS.createResolver({
+      typeName: 'Tenant',
+      fieldName: 'fob',
+      requestMappingTemplate: appsync.MappingTemplate.fromFile(
+        './lib/resolvers/getFob.req.vtl'
+      ),
+      responseMappingTemplate: appsync.MappingTemplate.fromFile(
+        './lib/resolvers/getFob.res.vtl'
+      ),
+    });
+
     // Replaced by pagination Lambda
     // deviceDS.createResolver({
     //   typeName: 'Query',

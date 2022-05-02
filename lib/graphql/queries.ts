@@ -51,6 +51,18 @@ export const getOrg = /* GraphQL */ `
     }
   }
 `;
+export const getTenant = /* GraphQL */ `
+  query GetTenant($id: ID!) {
+    getTenant(id: $id) {
+      id
+      name
+      fob {
+        id
+        name
+      }
+    }
+  }
+`;
 export const getOrgs = /* GraphQL */ `
   query GetOrgs($first: Int, $after: String, $last: Int, $before: String) {
     getOrgs(first: $first, after: $after, last: $last, before: $before) {
@@ -110,19 +122,19 @@ export const rooms = /* GraphQL */ `
     }
   }
 `;
-export const fob = /* GraphQL */ `
-  query Fob($id: ID!) {
-    fob(id: $id) {
-      id
-      name
-    }
-  }
-`;
 export const org = /* GraphQL */ `
   query Org($id: ID!) {
     org(id: $id) {
       id
       uid
+      name
+    }
+  }
+`;
+export const fob = /* GraphQL */ `
+  query Fob($id: ID) {
+    fob(id: $id) {
+      id
       name
     }
   }

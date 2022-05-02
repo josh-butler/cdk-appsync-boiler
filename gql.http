@@ -133,6 +133,28 @@ query GetBuilding($id: ID!) {
   "id": "01G1W119NCN19Y2V3Q4KCCYBZM"
 }
 
+### GET Tenant
+
+POST {{apiUrl}}
+Content-Type: application/json
+Authorization: {{token}}
+X-REQUEST-TYPE: GraphQL
+
+query GetTenant($id: ID!) {
+  getTenant(id: $id) {
+    id
+    name
+    fob {
+      id
+      name
+    }
+  }
+}
+
+{
+  "id": "a7f939d1-9231-4259-be42-a3c0df6b0fff"
+}
+
 ### GET Buildings
 
 POST {{apiUrl}}

@@ -106,6 +106,7 @@ type Fob {
 type Tenant {
   id: ID!
   name: String
+  fob(id: ID): Fob
 }
 
 type Mutation {
@@ -125,11 +126,13 @@ type Query {
   listDevices: [Device]
   getDeviceSensors(deviceId: ID!, limit: Int, nextToken: String): SensorConnection
   getOrg(uid: ID!): Org
+  getTenant(id: ID!): Tenant
   getOrgs(first: Int, after: String, last: Int, before: String): OrgConnection
   getBuilding(id: ID!): Building
   getBuildings(first: Int, after: String, last: Int, before: String): BuildingConnection
   rooms(first: Int, after: String, last: Int, before: String): RoomConnection
   org(id: ID!): Org
+  fob(id: ID): Fob
   node(id: ID!): Node
 }
 

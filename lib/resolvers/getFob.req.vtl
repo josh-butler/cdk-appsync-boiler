@@ -1,0 +1,7 @@
+#set($pk = $ctx.source.GSI1sk)
+#set($key = $util.toJson($util.dynamodb.toMapValues({"pk": $pk, "sk": $pk})))
+{
+    "version": "2017-02-28",
+    "operation": "GetItem",
+    "key" : $key
+}
