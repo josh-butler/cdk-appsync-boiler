@@ -211,6 +211,7 @@ query GetOrg($uid: ID!) {
     id
     name
     uid
+    created
   }
 }
 

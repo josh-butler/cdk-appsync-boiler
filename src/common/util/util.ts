@@ -26,4 +26,30 @@ const parseJson = (str: string) => {
   return data;
 };
 
-export {parseJson, uuid, base64, unBase64, ddbMarshal, ddbUnmarshal, ddbBase64};
+/**
+ * Maps Relay pagination args to DynamoDB query args (eg. {first, after, last, before} => [limit, cursor, reverse])
+ * - "first" has precedence, indicates forward pagination
+ *    and will use "after" as a query starting point if provided
+ * - "last" indicates reverse pagination
+ *   "last" & "before" will be ignored if "first" is also provided
+ * @param data - appsync query args {first, after, last, before}
+ * @returns array - aggregate ddb query flags [limit, cursor, reverse]
+ */
+// TODO: unit tests
+const ddbPagination = (data: any) => {
+  const {first = 0, after = '', last = 0, before = ''} = data;
+  const fwd = first ? [first, after, false] : [];
+  const rev = last ? [last, before, true] : [];
+  return fwd.length ? fwd : rev;
+};
+
+export {
+  parseJson,
+  uuid,
+  base64,
+  unBase64,
+  ddbMarshal,
+  ddbUnmarshal,
+  ddbBase64,
+  ddbPagination,
+};
