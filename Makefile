@@ -21,6 +21,8 @@ STACK_NAME?=CdkAppSyncBoilerStack
 LAMBDA_EVENT?=events/event.json
 LAMBDA_ENV?=.env.local.json
 
+JWKS_URL?=
+
 ifdef AWS_PROFILE
 AWS_OPTIONS=--profile $(AWS_PROFILE)
 endif
@@ -118,4 +120,7 @@ build: ## Build CDK app using local code
 	cdk synth --no-staging
 
 deploy: ## Deploy CDK app using local build
-	cdk deploy $(STACK_NAME) --require-approval never --verbose $(AWS_OPTIONS)
+	cdk deploy $(STACK_NAME) \
+	--require-approval never \
+	--verbose $(AWS_OPTIONS) \
+	--parameters JwksUrl=$(JWKS_URL)

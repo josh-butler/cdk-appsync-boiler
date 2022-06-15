@@ -1,9 +1,16 @@
-import {CfnOutput, Duration, ScopedAws, Stack, StackProps} from 'aws-cdk-lib';
+import {
+  CfnOutput,
+  CfnParameter,
+  Duration,
+  ScopedAws,
+  Stack,
+  StackProps,
+} from 'aws-cdk-lib';
 import {Construct} from 'constructs';
 import {Runtime} from 'aws-cdk-lib/aws-lambda';
 import {NodejsFunction} from 'aws-cdk-lib/aws-lambda-nodejs';
 import {CfnSecret} from 'aws-cdk-lib/aws-secretsmanager';
-import {RemovalPolicy} from 'aws-cdk-lib';
+import {RemovalPolicy, aws_lambda} from 'aws-cdk-lib';
 import {Table, BillingMode, AttributeType} from 'aws-cdk-lib/aws-dynamodb';
 
 import * as iam from 'aws-cdk-lib/aws-iam';
@@ -16,15 +23,12 @@ export class CdkAppSyncBoilerStack extends Stack {
     // ==== Parameters ====
     const {region, partition, accountId} = new ScopedAws(this);
 
-    // ==== Secrets ====
-    // // manually populate this secret after initial stack deploy
-    // const privateKeySecret = new CfnSecret(this, 'PrivateKeySecret', {
-    //   name: 'app/jwt/privateKey',
-    //   description: 'JWT private key',
-    //   secretString: '',
-    // });
+    const jwksUrl = new CfnParameter(this, 'JwksUrl', {
+      type: 'String',
+      description: 'Endpoint that provides public JWKS data',
+    });
 
-    // manually populate this secret after initial stack deploy
+    // ==== Secrets ====
     const publicKeySecret = new CfnSecret(this, 'PublicKeySecret', {
       name: '/app/jwt/publicKey',
       description: 'JWT public key',
@@ -81,10 +85,12 @@ export class CdkAppSyncBoilerStack extends Stack {
       memorySize: 128,
       timeout: Duration.seconds(30),
       runtime: Runtime.NODEJS_14_X,
+      architecture: aws_lambda.Architecture.ARM_64,
       handler: 'handler',
       entry: './src/handlers/gql-authorizer.ts',
       environment: {
         SECRET_ID: publicKeySecret.ref,
+        JWKS_URL: jwksUrl.valueAsString,
       },
       bundling: {
         minify: true,
