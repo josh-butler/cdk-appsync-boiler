@@ -1,6 +1,14 @@
-import {CfnOutput, Duration, ScopedAws, Stack, StackProps} from 'aws-cdk-lib';
+import {
+  CfnOutput,
+  Duration,
+  ScopedAws,
+  Stack,
+  StackProps,
+  custom_resources,
+  CustomResource,
+} from 'aws-cdk-lib';
 import {Construct} from 'constructs';
-import {Runtime} from 'aws-cdk-lib/aws-lambda';
+import {Runtime, Architecture} from 'aws-cdk-lib/aws-lambda';
 import {NodejsFunction} from 'aws-cdk-lib/aws-lambda-nodejs';
 import {CfnSecret} from 'aws-cdk-lib/aws-secretsmanager';
 import {RemovalPolicy} from 'aws-cdk-lib';
@@ -75,6 +83,50 @@ export class CdkAppSyncBoilerStack extends Stack {
       partitionKey: {name: 'GSI1pk', type: AttributeType.STRING},
       sortKey: {name: 'GSI1sk', type: AttributeType.STRING},
     });
+
+    // ==== Integration Tests Only ====
+    const entityTableInt = new Table(this, 'EntityTableInt', {
+      billingMode: BillingMode.PAY_PER_REQUEST,
+      removalPolicy: RemovalPolicy.DESTROY, // set RETAIN for prod?
+      pointInTimeRecovery: false, // set TRUE for prod?
+      partitionKey: {name: 'pk', type: AttributeType.STRING},
+      sortKey: {name: 'sk', type: AttributeType.STRING},
+    });
+
+    entityTableInt.addGlobalSecondaryIndex({
+      indexName: 'GSI1',
+      partitionKey: {name: 'GSI1pk', type: AttributeType.STRING},
+      sortKey: {name: 'GSI1sk', type: AttributeType.STRING},
+    });
+
+    const intTestPrep = new NodejsFunction(this, 'IntTestPrep', {
+      memorySize: 128,
+      timeout: Duration.seconds(300), // TODO: Increase to 900
+      runtime: Runtime.NODEJS_14_X,
+      architecture: Architecture.ARM_64,
+      handler: 'handler',
+      entry: './src/handlers/int-test-prep.ts',
+      environment: {
+        ENTITY_TABLE: entityTableInt.tableName,
+      },
+      bundling: {
+        minify: true,
+        externalModules: ['aws-sdk'],
+      },
+    });
+    entityTableInt.grantReadWriteData(intTestPrep);
+
+    // const populateDdbProvider = new custom_resources.Provider(
+    //   this,
+    //   'PopulateDdbProvider',
+    //   {
+    //     onEventHandler: intTestPrep,
+    //   }
+    // );
+
+    // new CustomResource(this, 'PopulateDdbResource', {
+    //   serviceToken: populateDdbProvider.serviceToken,
+    // });
 
     // ==== Lambda ====
     const gqlAuthorizer = new NodejsFunction(this, 'GqlAuthorizer', {

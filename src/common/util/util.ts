@@ -12,6 +12,8 @@ const ddbMarshal = (data: Object) => DynamoDB.Converter.marshall(data);
 
 const ddbUnmarshal = (data: any) => DynamoDB.Converter.unmarshall(data);
 
+const expires = (hours = 1) => Math.floor(Date.now() / 1000) + 3600 * hours;
+
 const ddbBase64 = (data: Object) =>
   Buffer.from(JSON.stringify(ddbMarshal(data))).toString('base64');
 
@@ -52,4 +54,5 @@ export {
   ddbUnmarshal,
   ddbBase64,
   ddbPagination,
+  expires,
 };
