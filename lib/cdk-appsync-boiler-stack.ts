@@ -17,12 +17,17 @@ import {Table, BillingMode, AttributeType} from 'aws-cdk-lib/aws-dynamodb';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as appsync from '@aws-cdk/aws-appsync-alpha';
 
+import {IntTestSupport} from './constructs/integration-test-support';
+
 export class CdkAppSyncBoilerStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
     // ==== Parameters ====
     const {region, partition, accountId} = new ScopedAws(this);
+
+    // ==== Conditions ====
+    const isIntTest = true;
 
     // ==== Secrets ====
     // // manually populate this secret after initial stack deploy
@@ -85,36 +90,40 @@ export class CdkAppSyncBoilerStack extends Stack {
     });
 
     // ==== Integration Tests Only ====
-    const entityTableInt = new Table(this, 'EntityTableInt', {
-      billingMode: BillingMode.PAY_PER_REQUEST,
-      removalPolicy: RemovalPolicy.DESTROY, // set RETAIN for prod?
-      pointInTimeRecovery: false, // set TRUE for prod?
-      partitionKey: {name: 'pk', type: AttributeType.STRING},
-      sortKey: {name: 'sk', type: AttributeType.STRING},
-    });
+    if (isIntTest) {
+      new IntTestSupport(this, 'IntTestSupport', {entityTable});
+    }
 
-    entityTableInt.addGlobalSecondaryIndex({
-      indexName: 'GSI1',
-      partitionKey: {name: 'GSI1pk', type: AttributeType.STRING},
-      sortKey: {name: 'GSI1sk', type: AttributeType.STRING},
-    });
+    // const entityTableInt = new Table(this, 'EntityTableInt', {
+    //   billingMode: BillingMode.PAY_PER_REQUEST,
+    //   removalPolicy: RemovalPolicy.DESTROY, // set RETAIN for prod?
+    //   pointInTimeRecovery: false, // set TRUE for prod?
+    //   partitionKey: {name: 'pk', type: AttributeType.STRING},
+    //   sortKey: {name: 'sk', type: AttributeType.STRING},
+    // });
 
-    const intTestPrep = new NodejsFunction(this, 'IntTestPrep', {
-      memorySize: 128,
-      timeout: Duration.seconds(300), // TODO: Increase to 900
-      runtime: Runtime.NODEJS_14_X,
-      architecture: Architecture.ARM_64,
-      handler: 'handler',
-      entry: './src/handlers/int-test-prep.ts',
-      environment: {
-        ENTITY_TABLE: entityTableInt.tableName,
-      },
-      bundling: {
-        minify: true,
-        externalModules: ['aws-sdk'],
-      },
-    });
-    entityTableInt.grantReadWriteData(intTestPrep);
+    // entityTableInt.addGlobalSecondaryIndex({
+    //   indexName: 'GSI1',
+    //   partitionKey: {name: 'GSI1pk', type: AttributeType.STRING},
+    //   sortKey: {name: 'GSI1sk', type: AttributeType.STRING},
+    // });
+
+    // const intTestPrep = new NodejsFunction(this, 'IntTestPrep', {
+    //   memorySize: 128,
+    //   timeout: Duration.seconds(300), // TODO: Increase to 900
+    //   runtime: Runtime.NODEJS_14_X,
+    //   architecture: Architecture.ARM_64,
+    //   handler: 'handler',
+    //   entry: './src/handlers/int-test-prep.ts',
+    //   environment: {
+    //     ENTITY_TABLE: entityTableInt.tableName,
+    //   },
+    //   bundling: {
+    //     minify: true,
+    //     externalModules: ['aws-sdk'],
+    //   },
+    // });
+    // entityTableInt.grantReadWriteData(intTestPrep);
 
     // const populateDdbProvider = new custom_resources.Provider(
     //   this,

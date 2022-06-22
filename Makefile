@@ -70,6 +70,9 @@ arm64: ## Enable local Linux OS ARM64 support
 codegen: ## Generate GraphQL code/types
 	cd $(ROOT_PATH)/lib && $(AMPLIFY) codegen
 
+get-export: ## Get CFN stack export value
+	aws cloudformation list-exports --query "Exports[?Name=='$(STACK_NAME)-IntegrationTestInitArn'].Value" --output text
+
 join-multi-line:
 	awk -v ORS='\\n' '1' id_rsa.pub
 
