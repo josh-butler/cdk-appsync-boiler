@@ -79,17 +79,6 @@ class IntTest {
     return !!tokenUrl;
   }
 
-  // async getToken() {
-  //   const {tokenUrl: url} = this.props;
-
-  //   const body = {isTest: true};
-
-  //   const {data, err} = await httpPost({url, body});
-
-
-  //   return data;
-  // }
-
   async getTokens() {
     const {tokenUrl: url} = this.props;
     const ids = [identityA('admin', 2), identityB('user', 2), identityB()];
@@ -106,33 +95,33 @@ class IntTest {
     return errors.length ? fnResp500(errors) : null;
   }
 
-  // async putDevice() {
-  //   let err;
+  async putDevice() {
+    let err;
 
-  //   const id = 'abc123';
-  //   const pk = `DEVICE#${id}`;
-  //   const GSI1sk = 'DEVICE';
-  //   const name = 'test-device';
+    const id = 'abc123';
+    const pk = `DEVICE#${id}`;
+    const GSI1sk = 'DEVICE';
+    const name = 'test-device';
 
-  //   const item = {
-  //     pk,
-  //     sk: pk,
-  //     GSI1sk,
-  //     id,
-  //     name,
-  //   };
+    const item = {
+      pk,
+      sk: pk,
+      GSI1sk,
+      id,
+      name,
+    };
 
-  //   logInfo('ddb put', {item});
+    logInfo('ddb put', {item});
 
-  //   try {
-  //     await DeviceEntity.put(item);
-  //   } catch (error) {
-  //     logErr('ddb put failed', {error});
-  //     err = error;
-  //   }
+    try {
+      await DeviceEntity.put(item);
+    } catch (error) {
+      logErr('ddb put failed', {error});
+      err = error;
+    }
 
-  //   return err;
-  // }
+    return err;
+  }
 
   async prepare() {
     console.log('this.props: ', this.props);
